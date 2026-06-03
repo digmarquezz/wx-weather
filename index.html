@@ -9,897 +9,651 @@
   <meta name="theme-color" content="#000000"/>
   <link rel="manifest" href="./manifest.json"/>
   <title>WX</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
-
   <style>
     :root {
-      --black: #000;
-      --white: #fff;
-      --gray1: #f5f5f5;
-      --gray2: #e0e0e0;
-      --gray3: #aaa;
-      --gray4: #666;
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --black:#000; --white:#fff;
+      --g1:#f7f7f7; --g2:#e8e8e8; --g3:#bbb; --g4:#777;
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bottom:env(safe-area-inset-bottom,0px);
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-    html, body {
-      width: 100%; height: 100%;
-      background: var(--black);
-      overscroll-behavior: none;
-    }
-
-    body {
-      font-family: 'Space Mono', monospace;
-      background: var(--white);
-      color: var(--black);
-      min-height: 100dvh;
-      overflow-x: hidden;
-    }
-
-    /* ── LOADING ─────────────────────────────── */
-    #loader {
-      position: fixed; inset: 0;
-      background: var(--white);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 24px; z-index: 999;
-      transition: opacity 0.5s ease;
-    }
-
-    #loader.hide { opacity: 0; pointer-events: none; }
-
-    .loader-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 64px; letter-spacing: 8px; color: var(--black);
-    }
-
-    .loader-bar-track {
-      width: 120px; height: 1px; background: var(--gray2);
-    }
-
-    .loader-bar-fill {
-      height: 1px; background: var(--black);
-      width: 0%; transition: width 0.8s ease;
-    }
-
-    .loader-msg {
-      font-size: 9px; letter-spacing: 0.15em; color: var(--gray3);
-    }
-
-    /* ── APP SHELL ────────────────────────────── */
-    #app {
-      padding-top: calc(var(--safe-top) + 16px);
-      padding-bottom: calc(var(--safe-bottom) + 20px);
-      padding-left: 24px;
-      padding-right: 24px;
-      max-width: 430px;
-      margin: 0 auto;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    #app.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── HEADER ───────────────────────────────── */
-    .header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px; letter-spacing: 6px; color: var(--black);
-    }
-
-    .location-pill {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
-      color: var(--gray4);
-      padding: 5px 10px;
-      border: 1px solid var(--gray2);
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .location-pill:active { background: var(--gray1); }
-
-    .dot-live {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--black);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
-    }
-
-    /* ── CITY + UPDATED ───────────────────────── */
-    .city-row {
-      margin-bottom: 2px;
-    }
-
-    .city-name {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
-      color: var(--black);
-    }
-
-    .updated {
-      font-size: 8px; letter-spacing: 0.1em; color: var(--gray3);
-      margin-top: 2px;
-    }
-
-    /* ── BIG TEMP ─────────────────────────────── */
-    .temp-block { margin: 8px 0 4px; position: relative; }
-
-    .temp-number {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(110px, 28vw, 148px);
-      line-height: 0.88;
-      letter-spacing: -4px;
-      color: var(--black);
-    }
-
-    .temp-unit {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 52px;
-      vertical-align: top;
-      margin-top: 14px;
-      display: inline-block;
-      color: var(--gray2);
-      letter-spacing: 0;
-    }
-
-    .condition-row {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      margin-top: 4px;
-    }
-
-    .condition-text {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
-      color: var(--black);
-    }
-
-    .hi-lo {
-      font-size: 10px; letter-spacing: 0.08em; color: var(--gray3);
-    }
-
-    /* ── DIVIDER ──────────────────────────────── */
-    .divider {
-      width: 100%; height: 1px;
-      background: var(--gray2);
-      margin: 18px 0;
-    }
-
-    /* ── SECTION LABEL ────────────────────────── */
-    .sec-label {
-      font-size: 8px; font-weight: 700; letter-spacing: 0.18em;
-      color: var(--gray3);
-      margin-bottom: 12px;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    .sec-label::after {
-      content: ''; flex: 1; height: 1px; background: var(--gray2);
-    }
-
-    /* ── FEELS + SUMMARY BAR ──────────────────── */
-    .summary-bar {
-      display: flex; gap: 0;
-      border: 1px solid var(--gray2);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .summary-item {
-      flex: 1;
-      padding: 12px 10px;
-      border-right: 1px solid var(--gray2);
-      text-align: center;
-    }
-
-    .summary-item:last-child { border-right: none; }
-
-    .summary-val {
-      font-size: 18px; font-weight: 700;
-      color: var(--black);
-    }
-
-    .summary-lbl {
-      font-size: 7px; font-weight: 700; letter-spacing: 0.12em;
-      color: var(--gray3); margin-top: 3px;
-    }
-
-    /* ── TABS ─────────────────────────────────── */
-    .tabs {
-      display: flex; gap: 0;
-      border: 1px solid var(--black);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-bottom: 16px;
-      width: fit-content;
-    }
-
-    .tab {
-      padding: 8px 16px;
-      font-family: 'Space Mono', monospace;
-      font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
-      cursor: pointer; border: none; background: var(--white);
-      color: var(--gray3); transition: all 0.15s;
-    }
-
-    .tab.on { background: var(--black); color: var(--white); }
-
-    /* ── HOURLY ───────────────────────────────── */
-    .hourly-scroll {
-      display: flex; gap: 6px;
-      overflow-x: auto; padding-bottom: 6px;
-      scrollbar-width: none; margin-bottom: 6px;
-    }
-
-    .hourly-scroll::-webkit-scrollbar { display: none; }
-
-    .h-item {
-      flex-shrink: 0;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 8px;
-      padding: 12px 10px;
-      border: 1px solid var(--gray2);
-      border-radius: 3px;
-      min-width: 54px;
-      transition: all 0.15s;
-    }
-
-    .h-item.now {
-      background: var(--black); border-color: var(--black); color: var(--white);
-    }
-
-    .h-time { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; }
-    .h-symbol { font-size: 18px; line-height: 1; }
-    .h-temp { font-size: 13px; font-weight: 700; }
-    .h-precip { font-size: 7px; letter-spacing: 0.06em; opacity: 0.6; }
-
-    /* ── WEEKLY ───────────────────────────────── */
-    .week-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 0;
-      border-bottom: 1px solid var(--gray1);
-    }
-
-    .week-row:last-child { border-bottom: none; }
-
-    .week-day { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; width: 30px; }
-    .week-symbol { font-size: 16px; width: 24px; text-align: center; }
-
-    .week-bar-wrap {
-      flex: 1; display: flex; align-items: center; gap: 8px;
-    }
-
-    .week-lo { font-size: 9px; color: var(--gray3); width: 26px; text-align: right; }
-    .week-hi { font-size: 9px; font-weight: 700; width: 26px; }
-
-    .bar-track {
-      flex: 1; height: 2px;
-      background: var(--gray2); border-radius: 1px; overflow: hidden;
-    }
-
-    .bar-fill { height: 100%; background: var(--black); border-radius: 1px; }
-
-    .week-precip { font-size: 7px; color: var(--gray3); width: 28px; text-align: right; }
-
-    /* ── STATS GRID ───────────────────────────── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--gray2);
-      border: 1px solid var(--gray2);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .stat-box {
-      background: var(--white);
-      padding: 14px 14px 12px;
-    }
-
-    .stat-lbl { font-size: 7px; font-weight: 700; letter-spacing: 0.15em; color: var(--gray3); }
-    .stat-val { font-size: 22px; font-weight: 700; margin-top: 4px; color: var(--black); }
-    .stat-sub { font-size: 7px; color: var(--gray3); margin-top: 2px; letter-spacing: 0.08em; }
-
-    /* ── SUN ARC ──────────────────────────────── */
-    .sun-section {
-      margin-bottom: 18px;
-    }
-
-    .sun-row {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 4px 0;
-    }
-
-    .sun-side { text-align: center; }
-    .sun-lbl { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; color: var(--gray3); }
-    .sun-time { font-size: 20px; font-weight: 700; margin-top: 4px; }
-    .sun-sub { font-size: 7px; color: var(--gray3); letter-spacing: 0.08em; margin-top: 2px; }
-
-    .arc-wrap { flex: 1; padding: 0 12px; }
-
-    /* ── CURIOSITY CARD ───────────────────────── */
-    .curiosity-card {
-      border: 1px solid var(--black);
-      border-radius: 3px;
-      padding: 16px;
-      margin-bottom: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .curiosity-tag {
-      font-size: 7px; font-weight: 700; letter-spacing: 0.18em;
-      color: var(--gray3); margin-bottom: 8px;
-    }
-
-    .curiosity-text {
-      font-size: 11px; line-height: 1.7;
-      color: var(--black); font-style: italic;
-    }
-
-    .curiosity-bg {
-      position: absolute; right: 12px; bottom: 8px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 80px; color: var(--gray1);
-      line-height: 1; pointer-events: none; letter-spacing: -2px;
-    }
-
-    /* ── MOON PHASE ───────────────────────────── */
-    .moon-row {
-      display: flex; align-items: center; gap: 16px;
-      border: 1px solid var(--gray2);
-      border-radius: 3px; padding: 14px;
-      margin-bottom: 18px;
-    }
-
-    .moon-symbol { font-size: 36px; line-height: 1; }
-    .moon-info { flex: 1; }
-    .moon-phase-name { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; }
-    .moon-detail { font-size: 8px; color: var(--gray3); margin-top: 4px; letter-spacing: 0.08em; line-height: 1.6; }
-
-    /* ── AIR QUALITY ──────────────────────────── */
-    .aqi-bar-wrap {
-      margin-top: 8px;
-    }
-
-    .aqi-track {
-      height: 4px; background: var(--gray2);
-      border-radius: 2px; overflow: hidden; margin: 6px 0;
-    }
-
-    .aqi-fill { height: 100%; border-radius: 2px; background: var(--black); }
-
-    .aqi-labels {
-      display: flex; justify-content: space-between;
-      font-size: 7px; color: var(--gray3); letter-spacing: 0.08em;
-    }
-
-    /* ── GOLDEN HOUR ──────────────────────────── */
-    .golden-row {
-      display: flex; gap: 1px;
-      background: var(--gray2);
-      border: 1px solid var(--gray2);
-      border-radius: 3px; overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .golden-item {
-      flex: 1; background: var(--white);
-      padding: 13px 12px;
-    }
-
-    .golden-lbl { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; color: var(--gray3); }
-    .golden-time { font-size: 17px; font-weight: 700; margin-top: 4px; }
-    .golden-dur { font-size: 7px; color: var(--gray3); margin-top: 2px; letter-spacing: 0.08em; }
-
-    /* ── FOOTER ───────────────────────────────── */
-    .footer {
-      text-align: center;
-      padding-top: 8px;
-      border-top: 1px solid var(--gray1);
-    }
-
-    .footer-source {
-      font-size: 7px; color: var(--gray3);
-      letter-spacing: 0.1em; line-height: 1.8;
-    }
-
-    .footer-source a {
-      color: var(--gray3); text-decoration: none;
-      border-bottom: 1px solid var(--gray2);
-    }
-
-    /* ── ANIMATIONS ───────────────────────────── */
-    .fade-up { opacity: 0; transform: translateY(14px); animation: fu 0.5s ease forwards; }
-    @keyframes fu { to { opacity: 1; transform: translateY(0); } }
-    .d1 { animation-delay: 0.08s; } .d2 { animation-delay: 0.16s; }
-    .d3 { animation-delay: 0.24s; } .d4 { animation-delay: 0.32s; }
-    .d5 { animation-delay: 0.42s; } .d6 { animation-delay: 0.52s; }
-    .d7 { animation-delay: 0.62s; } .d8 { animation-delay: 0.72s; }
-
-    /* ── ERROR ────────────────────────────────── */
-    #error-msg {
-      display: none;
-      text-align: center; padding: 60px 24px;
-      font-size: 10px; color: var(--gray3); letter-spacing: 0.1em; line-height: 2;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+    html,body{width:100%;background:#000;overscroll-behavior:none;}
+    body{font-family:'Space Mono',monospace;background:var(--white);color:var(--black);min-height:100dvh;overflow-x:hidden;}
+
+    /* LOADER */
+    #loader{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:999;transition:opacity 0.5s;}
+    #loader.hide{opacity:0;pointer-events:none;}
+    .l-logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:10px;}
+    .l-track{width:100px;height:1px;background:var(--g2);}
+    .l-fill{height:1px;background:#000;width:0%;transition:width 0.6s ease;}
+    .l-msg{font-size:8px;letter-spacing:0.18em;color:var(--g3);}
+
+    /* APP */
+    #app{padding-top:calc(var(--safe-top) + 20px);padding-bottom:calc(var(--safe-bottom) + 32px);padding-left:22px;padding-right:22px;max-width:430px;margin:0 auto;opacity:0;transform:translateY(10px);transition:opacity 0.5s,transform 0.5s;}
+    #app.visible{opacity:1;transform:translateY(0);}
+
+    /* HEADER */
+    .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:8px;opacity:0.4;}
+    .gps-pill{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:700;letter-spacing:0.12em;color:var(--g4);padding:5px 10px;border:1px solid var(--g2);border-radius:2px;cursor:pointer;transition:all 0.15s;}
+    .gps-pill:active{background:var(--g1);}
+    .dot{width:5px;height:5px;border-radius:50%;background:#000;animation:blink 2s infinite;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+
+    /* CITY */
+    .city{font-size:11px;font-weight:700;letter-spacing:0.2em;margin-bottom:1px;}
+    .updated{font-size:7px;letter-spacing:0.12em;color:var(--g3);}
+
+    /* TEMP */
+    .temp-wrap{margin:6px 0 2px;display:flex;align-items:flex-end;gap:0;}
+    .temp-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,26vw,140px);line-height:0.85;letter-spacing:-4px;}
+    .temp-unit{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;margin-bottom:8px;color:var(--g2);}
+    .cond-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+    .cond{font-size:10px;font-weight:700;letter-spacing:0.16em;}
+    .hilo{font-size:9px;letter-spacing:0.08em;color:var(--g3);}
+
+    /* DIVIDER */
+    .div{width:100%;height:1px;background:var(--g2);margin:16px 0;}
+
+    /* SECTION LABEL */
+    .slbl{font-size:7px;font-weight:700;letter-spacing:0.2em;color:var(--g3);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .slbl::after{content:'';flex:1;height:1px;background:var(--g2);}
+
+    /* SUMMARY STRIP */
+    .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--g2);border:1px solid var(--g2);border-radius:3px;overflow:hidden;margin-bottom:16px;}
+    .strip-item{background:#fff;padding:11px 8px;text-align:center;}
+    .sv{font-size:16px;font-weight:700;}
+    .sl{font-size:6px;font-weight:700;letter-spacing:0.12em;color:var(--g3);margin-top:3px;}
+
+    /* TABS */
+    .tabs{display:flex;border:1px solid #000;border-radius:3px;overflow:hidden;width:fit-content;margin-bottom:14px;}
+    .tab{padding:7px 14px;font-family:'Space Mono',monospace;font-size:7px;font-weight:700;letter-spacing:0.12em;cursor:pointer;border:none;background:#fff;color:var(--g3);transition:all 0.15s;}
+    .tab.on{background:#000;color:#fff;}
+
+    /* HOURLY */
+    .hscroll{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+    .hscroll::-webkit-scrollbar{display:none;}
+    .hi{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:7px;padding:11px 9px;border:1px solid var(--g2);border-radius:3px;min-width:52px;transition:all 0.15s;}
+    .hi.now{background:#000;border-color:#000;color:#fff;}
+    .ht{font-size:7px;font-weight:700;letter-spacing:0.08em;}
+    .hs{font-size:16px;line-height:1;}
+    .hv{font-size:12px;font-weight:700;}
+    .hp{font-size:6px;opacity:0.55;letter-spacing:0.06em;}
+
+    /* WEEKLY */
+    .wr{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--g1);}
+    .wr:last-child{border-bottom:none;}
+    .wd{font-size:8px;font-weight:700;letter-spacing:0.1em;width:28px;}
+    .wsym{font-size:14px;width:20px;text-align:center;}
+    .wbw{flex:1;display:flex;align-items:center;gap:6px;}
+    .wlo{font-size:8px;color:var(--g3);width:22px;text-align:right;}
+    .whi{font-size:8px;font-weight:700;width:22px;}
+    .btr{flex:1;height:2px;background:var(--g2);border-radius:1px;overflow:hidden;}
+    .btf{height:100%;background:#000;border-radius:1px;}
+    .wpp{font-size:7px;color:var(--g3);width:26px;text-align:right;}
+
+    /* STATS GRID */
+    .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--g2);border:1px solid var(--g2);border-radius:3px;overflow:hidden;margin-bottom:16px;}
+    .sbox{background:#fff;padding:13px 13px 11px;}
+    .sbl{font-size:6px;font-weight:700;letter-spacing:0.16em;color:var(--g3);}
+    .sbv{font-size:20px;font-weight:700;margin-top:4px;}
+    .sbs{font-size:7px;color:var(--g4);margin-top:2px;letter-spacing:0.06em;line-height:1.4;}
+
+    /* UV BAR */
+    .uv-bar-wrap{margin-top:6px;}
+    .uv-track{height:3px;background:var(--g2);border-radius:2px;overflow:hidden;margin:4px 0 3px;}
+    .uv-fill{height:100%;border-radius:2px;background:#000;}
+    .uv-scale{display:flex;justify-content:space-between;font-size:6px;color:var(--g3);letter-spacing:0.06em;}
+
+    /* SUN */
+    .sun-wrap{margin-bottom:16px;}
+    .sun-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-bottom:6px;}
+    .sun-side{min-width:70px;}
+    .sun-side.right{text-align:right;}
+    .sunlbl{font-size:6px;font-weight:700;letter-spacing:0.16em;color:var(--g3);margin-bottom:3px;}
+    .suntime{font-size:22px;font-weight:700;line-height:1;}
+    .sunsub{font-size:7px;color:var(--g3);margin-top:2px;letter-spacing:0.06em;}
+    .arc-wrap{flex:1;}
+    .daylight{text-align:center;font-size:7px;letter-spacing:0.14em;color:var(--g3);}
+
+    /* GOLDEN HOUR */
+    .gold-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--g2);border:1px solid var(--g2);border-radius:3px;overflow:hidden;margin-bottom:16px;}
+    .gold-item{background:#fff;padding:13px;}
+    .gll{font-size:6px;font-weight:700;letter-spacing:0.16em;color:var(--g3);margin-bottom:4px;}
+    .glt{font-size:18px;font-weight:700;}
+    .gld{font-size:7px;color:var(--g3);margin-top:2px;letter-spacing:0.06em;}
+
+    /* MOON */
+    .moon-wrap{display:flex;align-items:center;gap:14px;border:1px solid var(--g2);border-radius:3px;padding:14px;margin-bottom:16px;}
+    .moon-sym{font-size:40px;line-height:1;flex-shrink:0;}
+    .moon-name{font-size:11px;font-weight:700;letter-spacing:0.08em;margin-bottom:5px;}
+    .moon-pct{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+    .moon-pct-bar{flex:1;height:2px;background:var(--g2);border-radius:1px;overflow:hidden;}
+    .moon-pct-fill{height:100%;background:#000;border-radius:1px;}
+    .moon-pct-val{font-size:8px;font-weight:700;white-space:nowrap;}
+    .moon-txt{font-size:8px;color:var(--g4);line-height:1.6;letter-spacing:0.04em;}
+
+    /* CURIOSITY */
+    .cur-card{border:1px solid #000;border-radius:3px;padding:16px;margin-bottom:16px;position:relative;overflow:hidden;}
+    .cur-tag{font-size:7px;font-weight:700;letter-spacing:0.18em;color:var(--g3);margin-bottom:8px;}
+    .cur-txt{font-size:10px;line-height:1.75;font-style:italic;position:relative;z-index:1;}
+    .cur-bg{position:absolute;right:10px;bottom:4px;font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--g1);line-height:1;pointer-events:none;letter-spacing:-2px;}
+
+    /* AQI */
+    .aqi-full{grid-column:1/-1;}
+    .aqi-track{height:4px;background:var(--g2);border-radius:2px;overflow:hidden;margin:8px 0 4px;}
+    .aqi-fill{height:100%;border-radius:2px;background:#000;}
+    .aqi-lbls{display:flex;justify-content:space-between;font-size:6px;color:var(--g3);letter-spacing:0.06em;}
+
+    /* NOTIF BANNER */
+    #notif-banner{display:none;margin-bottom:16px;border:1px solid #000;border-radius:3px;padding:14px;cursor:pointer;transition:all 0.15s;}
+    #notif-banner:active{background:var(--g1);}
+    .nb-title{font-size:9px;font-weight:700;letter-spacing:0.14em;margin-bottom:4px;}
+    .nb-sub{font-size:8px;color:var(--g4);line-height:1.5;letter-spacing:0.06em;}
+    .nb-btn{display:inline-block;margin-top:10px;padding:7px 16px;background:#000;color:#fff;font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.12em;border-radius:2px;}
+
+    /* FOOTER */
+    .footer{text-align:center;padding-top:10px;border-top:1px solid var(--g1);}
+    .footer-txt{font-size:7px;color:var(--g3);letter-spacing:0.1em;line-height:2;}
+    .footer-txt a{color:var(--g3);text-decoration:none;border-bottom:1px solid var(--g2);}
+
+    /* ANIMATIONS */
+    .fu{opacity:0;transform:translateY(12px);animation:fu 0.5s ease forwards;}
+    @keyframes fu{to{opacity:1;transform:translateY(0);}}
+    .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.20s}
+    .d4{animation-delay:.28s}.d5{animation-delay:.38s}.d6{animation-delay:.48s}
+    .d7{animation-delay:.58s}.d8{animation-delay:.68s}.d9{animation-delay:.78s}
   </style>
 </head>
-
 <body>
 
 <!-- LOADER -->
 <div id="loader">
-  <div class="loader-logo">WX</div>
-  <div class="loader-bar-track"><div class="loader-bar-fill" id="loader-bar"></div></div>
-  <div class="loader-msg" id="loader-msg">OBTENIENDO UBICACIÓN...</div>
-</div>
-
-<!-- ERROR -->
-<div id="error-msg">
-  <div style="font-size:32px;margin-bottom:16px;">⚠</div>
-  <div id="error-text">No se pudo obtener el tiempo.<br/>Comprueba tu conexión e intenta de nuevo.</div>
-  <div style="margin-top:24px;">
-    <button onclick="location.reload()" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.14em;font-weight:700;padding:10px 24px;border:1px solid #000;background:#000;color:#fff;cursor:pointer;border-radius:2px;">REINTENTAR</button>
-  </div>
+  <div class="l-logo">WX</div>
+  <div class="l-track"><div class="l-fill" id="lbar"></div></div>
+  <div class="l-msg" id="lmsg">INICIANDO...</div>
 </div>
 
 <!-- APP -->
 <div id="app">
 
   <!-- HEADER -->
-  <div class="header fade-up d1">
+  <div class="hdr fu d1">
     <div class="logo">WX</div>
-    <div class="location-pill" onclick="location.reload()">
-      <div class="dot-live"></div>
-      <span id="loc-label">CARGANDO</span>
+    <div class="gps-pill" onclick="location.reload()">
+      <div class="dot"></div>
+      <span id="loc-lbl">GPS</span>
     </div>
   </div>
-
-  <div class="city-row fade-up d1">
-    <div class="city-name" id="city-name">—</div>
-    <div class="updated" id="updated-time">ACTUALIZANDO...</div>
+  <div class="fu d1">
+    <div class="city" id="city-name">—</div>
+    <div class="updated" id="updated">—</div>
   </div>
 
   <!-- BIG TEMP -->
-  <div class="temp-block fade-up d2">
-    <div>
-      <span class="temp-number" id="temp-now">—</span>
+  <div class="fu d2">
+    <div class="temp-wrap">
+      <span class="temp-big" id="temp">—</span>
       <span class="temp-unit">°C</span>
     </div>
-    <div class="condition-row">
-      <span class="condition-text" id="condition-text">—</span>
-      <span class="hi-lo" id="hi-lo">↑—° ↓—°</span>
+    <div class="cond-row">
+      <span class="cond" id="cond">—</span>
+      <span class="hilo" id="hilo">—</span>
     </div>
   </div>
 
-  <div class="divider fade-up d2"></div>
+  <div class="div fu d2"></div>
 
-  <!-- SUMMARY BAR -->
-  <div class="sec-label fade-up d3">AHORA</div>
-  <div class="summary-bar fade-up d3">
-    <div class="summary-item">
-      <div class="summary-val" id="s-feels">—</div>
-      <div class="summary-lbl">SENSACIÓN</div>
+  <!-- NOTIF BANNER -->
+  <div id="notif-banner" class="fu d2">
+    <div class="nb-title">☀ RESUMEN MATUTINO</div>
+    <div class="nb-sub">Recibe cada mañana a las 8:00 un resumen del tiempo del día. Solo funciona con la app abierta al menos una vez al día.</div>
+    <div class="nb-btn" id="notif-btn" onclick="requestNotif()">ACTIVAR NOTIFICACIONES</div>
+  </div>
+
+  <!-- SUMMARY STRIP -->
+  <div class="slbl fu d3">AHORA MISMO</div>
+  <div class="strip fu d3">
+    <div class="strip-item"><div class="sv" id="s-feels">—</div><div class="sl">SENSACIÓN</div></div>
+    <div class="strip-item"><div class="sv" id="s-hum">—</div><div class="sl">HUMEDAD</div></div>
+    <div class="strip-item"><div class="sv" id="s-wind">—</div><div class="sl">VIENTO</div></div>
+    <div class="strip-item"><div class="sv" id="s-prec">—</div><div class="sl">PRECIP</div></div>
+  </div>
+
+  <!-- HOURLY / WEEKLY -->
+  <div class="tabs fu d3">
+    <button class="tab on" id="tab-h" onclick="swTab('h')">POR HORA</button>
+    <button class="tab" id="tab-w" onclick="swTab('w')">7 DÍAS</button>
+  </div>
+  <div id="ph" class="fu d3"><div class="hscroll" id="hourly"></div></div>
+  <div id="pw" style="display:none" class="fu d3"><div id="weekly"></div></div>
+
+  <div class="div fu d4"></div>
+
+  <!-- STATS -->
+  <div class="slbl fu d4">CONDICIONES</div>
+  <div class="sgrid fu d4">
+    <div class="sbox">
+      <div class="sbl">ÍNDICE UV</div>
+      <div class="sbv" id="uv-val">—</div>
+      <div class="sbs" id="uv-lbl">—</div>
+      <div class="uv-bar-wrap">
+        <div class="uv-track"><div class="uv-fill" id="uv-bar" style="width:0%"></div></div>
+        <div class="uv-scale"><span>0</span><span>3</span><span>6</span><span>8</span><span>11+</span></div>
+      </div>
     </div>
-    <div class="summary-item">
-      <div class="summary-val" id="s-humid">—</div>
-      <div class="summary-lbl">HUMEDAD</div>
+    <div class="sbox">
+      <div class="sbl">PRESIÓN</div>
+      <div class="sbv" id="st-pres">—</div>
+      <div class="sbs" id="st-pres-s">—</div>
     </div>
-    <div class="summary-item">
-      <div class="summary-val" id="s-wind">—</div>
-      <div class="summary-lbl">VIENTO</div>
+    <div class="sbox">
+      <div class="sbl">VISIBILIDAD</div>
+      <div class="sbv" id="st-vis">—</div>
+      <div class="sbs">km de alcance visual</div>
     </div>
-    <div class="summary-item">
-      <div class="summary-val" id="s-precip">—</div>
-      <div class="summary-lbl">PRECIP.</div>
+    <div class="sbox">
+      <div class="sbl">PUNTO DE ROCÍO</div>
+      <div class="sbv" id="st-dew">—</div>
+      <div class="sbs" id="st-dew-s">—</div>
+    </div>
+    <div class="sbox">
+      <div class="sbl">NUBOSIDAD</div>
+      <div class="sbv" id="st-cloud">—</div>
+      <div class="sbs" id="st-cloud-s">—</div>
+    </div>
+    <div class="sbox">
+      <div class="sbl">RÁFAGAS</div>
+      <div class="sbv" id="st-gust">—</div>
+      <div class="sbs">km/h velocidad punta</div>
     </div>
   </div>
 
-  <!-- TABS: HOURLY / WEEKLY -->
-  <div class="tabs fade-up d3">
-    <button class="tab on" id="tab-hour" onclick="switchTab('hour')">POR HORA</button>
-    <button class="tab" id="tab-week" onclick="switchTab('week')">7 DÍAS</button>
-  </div>
-
-  <div id="panel-hour" class="fade-up d3">
-    <div class="hourly-scroll" id="hourly-list"></div>
-  </div>
-
-  <div id="panel-week" style="display:none" class="fade-up d3">
-    <div id="weekly-list"></div>
-  </div>
-
-  <div class="divider fade-up d4"></div>
-
-  <!-- STATS GRID -->
-  <div class="sec-label fade-up d4">CONDICIONES</div>
-  <div class="stats-grid fade-up d4">
-    <div class="stat-box">
-      <div class="stat-lbl">PRESIÓN</div>
-      <div class="stat-val" id="st-pressure">—</div>
-      <div class="stat-sub" id="st-pressure-sub">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">ÍNDICE UV</div>
-      <div class="stat-val" id="st-uv">—</div>
-      <div class="stat-sub" id="st-uv-sub">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">VISIBILIDAD</div>
-      <div class="stat-val" id="st-vis">—</div>
-      <div class="stat-sub">km de alcance visual</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">PUNTO DE ROCÍO</div>
-      <div class="stat-val" id="st-dew">—</div>
-      <div class="stat-sub" id="st-dew-sub">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">NUBOSIDAD</div>
-      <div class="stat-val" id="st-cloud">—</div>
-      <div class="stat-sub" id="st-cloud-sub">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">RÁFAGAS</div>
-      <div class="stat-val" id="st-gust">—</div>
-      <div class="stat-sub">km/h velocidad punta</div>
-    </div>
-  </div>
+  <div class="div fu d5"></div>
 
   <!-- SUN ARC -->
-  <div class="sec-label fade-up d5">SOL</div>
-  <div class="sun-section fade-up d5">
+  <div class="slbl fu d5">ASTRO SOLAR</div>
+  <div class="sun-wrap fu d5">
     <div class="sun-row">
       <div class="sun-side">
-        <div class="sun-lbl">AMANECER</div>
-        <div class="sun-time" id="sunrise">—</div>
-        <div class="sun-sub" id="dawn">alba —</div>
+        <div class="sunlbl">AMANECER</div>
+        <div class="suntime" id="sunrise">—</div>
+        <div class="sunsub" id="dawn-lbl">—</div>
       </div>
       <div class="arc-wrap">
-        <svg id="sun-arc" viewBox="0 0 200 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 65 Q100 -15 190 65" stroke="#e0e0e0" stroke-width="1.5" fill="none"/>
-          <path id="arc-progress" d="M10 65 Q100 -15 190 65" stroke="#000" stroke-width="1.5" fill="none"
-                stroke-dasharray="240" stroke-dashoffset="240"/>
-          <circle id="sun-dot" cx="10" cy="65" r="4" fill="#000"/>
-          <line x1="10" y1="65" x2="190" y2="65" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3 4"/>
+        <svg id="arc-svg" viewBox="0 0 200 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+          <!-- Horizon dashed line -->
+          <line x1="8" y1="66" x2="192" y2="66" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="3 5"/>
+          <!-- Arc background -->
+          <path d="M12 66 Q100 -8 188 66" stroke="#ebebeb" stroke-width="1.5" fill="none"/>
+          <!-- Arc progress -->
+          <path id="arc-prog" d="M12 66 Q100 -8 188 66" stroke="#000" stroke-width="1.5" fill="none" stroke-dasharray="230" stroke-dashoffset="230"/>
+          <!-- Sun dot -->
+          <circle id="sun-dot" cx="12" cy="66" r="4.5" fill="#000"/>
+          <circle id="sun-dot2" cx="12" cy="66" r="2" fill="#fff"/>
+          <!-- Tick marks -->
+          <line x1="12" y1="66" x2="12" y2="58" stroke="#ddd" stroke-width="1"/>
+          <line x1="188" y1="66" x2="188" y2="58" stroke="#ddd" stroke-width="1"/>
+          <line x1="100" y1="66" x2="100" y2="62" stroke="#ddd" stroke-width="1"/>
         </svg>
       </div>
-      <div class="sun-side" style="text-align:right">
-        <div class="sun-lbl">ATARDECER</div>
-        <div class="sun-time" id="sunset">—</div>
-        <div class="sun-sub" id="dusk">ocaso —</div>
+      <div class="sun-side right">
+        <div class="sunlbl">ATARDECER</div>
+        <div class="suntime" id="sunset">—</div>
+        <div class="sunsub" id="dusk-lbl">—</div>
       </div>
     </div>
-    <div style="text-align:center;margin-top:4px">
-      <span style="font-size:8px;letter-spacing:0.12em;color:var(--gray3)" id="daylight-hours">—</span>
-    </div>
+    <div class="daylight" id="daylight">—</div>
   </div>
 
-  <div class="divider fade-up d5"></div>
+  <div class="div fu d5"></div>
 
   <!-- GOLDEN HOUR -->
-  <div class="sec-label fade-up d5">HORA DORADA · FOTOGRAFÍA</div>
-  <div class="golden-row fade-up d5">
-    <div class="golden-item">
-      <div class="golden-lbl">↑ MAÑANA</div>
-      <div class="golden-time" id="golden-am">—</div>
-      <div class="golden-dur" id="golden-am-dur">—</div>
+  <div class="slbl fu d5">HORA DORADA · FOTOGRAFÍA</div>
+  <div class="gold-grid fu d5">
+    <div class="gold-item">
+      <div class="gll">↑ MAÑANA</div>
+      <div class="glt" id="gam">—</div>
+      <div class="gld" id="gam-d">—</div>
     </div>
-    <div class="golden-item">
-      <div class="golden-lbl">↓ TARDE</div>
-      <div class="golden-time" id="golden-pm">—</div>
-      <div class="golden-dur" id="golden-pm-dur">—</div>
-    </div>
-  </div>
-
-  <!-- MOON PHASE -->
-  <div class="sec-label fade-up d6">LUNA</div>
-  <div class="moon-row fade-up d6">
-    <div class="moon-symbol" id="moon-symbol">🌑</div>
-    <div class="moon-info">
-      <div class="moon-phase-name" id="moon-phase-name">—</div>
-      <div class="moon-detail" id="moon-detail">—</div>
+    <div class="gold-item">
+      <div class="gll">↓ TARDE</div>
+      <div class="glt" id="gpm">—</div>
+      <div class="gld" id="gpm-d">—</div>
     </div>
   </div>
 
-  <!-- CURIOSITY CARD -->
-  <div class="sec-label fade-up d6">DATO DEL DÍA</div>
-  <div class="curiosity-card fade-up d6">
-    <div class="curiosity-tag">// METEOROLOGÍA</div>
-    <div class="curiosity-text" id="curiosity-text">—</div>
-    <div class="curiosity-bg" id="curiosity-bg">—</div>
+  <!-- MOON -->
+  <div class="slbl fu d6">FASE LUNAR</div>
+  <div class="moon-wrap fu d6">
+    <div class="moon-sym" id="moon-sym">🌑</div>
+    <div style="flex:1;min-width:0;">
+      <div class="moon-name" id="moon-name">—</div>
+      <div class="moon-pct">
+        <div class="moon-pct-bar"><div class="moon-pct-fill" id="moon-bar" style="width:0%"></div></div>
+        <div class="moon-pct-val" id="moon-pct">—</div>
+      </div>
+      <div class="moon-txt" id="moon-txt">—</div>
+    </div>
+  </div>
+
+  <div class="div fu d6"></div>
+
+  <!-- CURIOSITY -->
+  <div class="slbl fu d7">DATO DEL DÍA</div>
+  <div class="cur-card fu d7">
+    <div class="cur-tag">// METEOROLOGÍA</div>
+    <div class="cur-txt" id="cur-txt">—</div>
+    <div class="cur-bg" id="cur-bg">—</div>
   </div>
 
   <!-- AIR QUALITY -->
-  <div class="sec-label fade-up d7">CALIDAD DEL AIRE</div>
-  <div class="stats-grid fade-up d7" style="margin-bottom:18px">
-    <div class="stat-box" style="grid-column:1/-1">
-      <div class="stat-lbl">ÍNDICE AQI (EUROPEO)</div>
-      <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px">
-        <div class="stat-val" id="aqi-val">—</div>
-        <div style="font-size:10px;font-weight:700;color:var(--gray4)" id="aqi-label">—</div>
+  <div class="slbl fu d7">CALIDAD DEL AIRE</div>
+  <div class="sgrid fu d7">
+    <div class="sbox aqi-full">
+      <div class="sbl">ÍNDICE AQI EUROPEO</div>
+      <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px;">
+        <div class="sbv" id="aqi-v">—</div>
+        <div style="font-size:9px;font-weight:700;color:var(--g4)" id="aqi-l">—</div>
       </div>
-      <div class="aqi-bar-wrap">
-        <div class="aqi-track"><div class="aqi-fill" id="aqi-fill" style="width:0%"></div></div>
-        <div class="aqi-labels">
-          <span>BUENA</span><span>MODERADA</span><span>ALTA</span><span>MUY ALTA</span>
-        </div>
-      </div>
+      <div class="aqi-track"><div class="aqi-fill" id="aqi-bar" style="width:0%"></div></div>
+      <div class="aqi-lbls"><span>BUENA</span><span>MODERADA</span><span>ALTA</span><span>MUY ALTA</span></div>
     </div>
-    <div class="stat-box">
-      <div class="stat-lbl">PM2.5</div>
-      <div class="stat-val" id="aqi-pm25">—</div>
-      <div class="stat-sub">µg/m³</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">PM10</div>
-      <div class="stat-val" id="aqi-pm10">—</div>
-      <div class="stat-sub">µg/m³</div>
-    </div>
+    <div class="sbox"><div class="sbl">PM2.5</div><div class="sbv" id="pm25">—</div><div class="sbs">µg/m³</div></div>
+    <div class="sbox"><div class="sbl">PM10</div><div class="sbv" id="pm10">—</div><div class="sbs">µg/m³</div></div>
   </div>
 
   <!-- FOOTER -->
-  <div class="footer fade-up d8">
-    <div class="footer-source">
-      DATOS METEOROLÓGICOS · <a href="https://open-meteo.com" target="_blank">OPEN-METEO.COM</a><br/>
+  <div class="footer fu d9">
+    <div class="footer-txt">
+      METEOROLOGÍA · <a href="https://open-meteo.com" target="_blank">OPEN-METEO.COM</a><br/>
       CALIDAD DEL AIRE · <a href="https://open-meteo.com" target="_blank">OPEN-METEO AIR QUALITY API</a><br/>
-      GEOCODIFICACIÓN · <a href="https://nominatim.openstreetmap.org" target="_blank">NOMINATIM / OPENSTREETMAP</a><br/>
-      <br/>TODOS LOS SERVICIOS SON GRATUITOS Y DE CÓDIGO ABIERTO<br/>
-      WX · <span id="footer-year"></span>
+      GEOCODIFICACIÓN · <a href="https://nominatim.openstreetmap.org" target="_blank">NOMINATIM / OSM</a><br/>
+      TODOS LOS SERVICIOS SON GRATUITOS Y DE CÓDIGO ABIERTO<br/>
+      WX · <span id="yr"></span>
     </div>
   </div>
 
 </div><!-- /app -->
 
 <script>
-// ─── HELPERS ────────────────────────────────────────────────────────────────
-
-function fmt(n, dec = 0) { return Number(n).toFixed(dec); }
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const f0 = n => Number(n).toFixed(0);
+const f1 = n => Number(n).toFixed(1);
 
 function fmtTime(iso) {
-  const d = new Date(iso);
-  return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
+  return new Date(iso).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',hour12:false});
 }
 
-function fmtHour(iso) {
-  const d = new Date(iso);
-  const h = d.getHours();
-  return h === new Date().getHours() ? 'AHORA' : h + 'H';
+function minsFromMidnight(str) {
+  const [h,m] = str.split(':').map(Number);
+  return h*60+m;
 }
 
-function wmoToText(code) {
-  const map = {
-    0:'DESPEJADO', 1:'CASI DESPEJADO', 2:'PARCIALMENTE NUBLADO', 3:'NUBLADO',
-    45:'NIEBLA', 48:'NIEBLA HELADA',
-    51:'LLOVIZNA DÉBIL', 53:'LLOVIZNA', 55:'LLOVIZNA INTENSA',
-    61:'LLUVIA DÉBIL', 63:'LLUVIA', 65:'LLUVIA FUERTE',
-    71:'NIEVE DÉBIL', 73:'NIEVE', 75:'NIEVE INTENSA', 77:'AGUANIEVE',
-    80:'CHUBASCOS', 81:'CHUBASCOS FUERTES', 82:'CHUBASCOS VIOLENTOS',
-    85:'NEVADA', 86:'NEVADA INTENSA',
-    95:'TORMENTA', 96:'TORMENTA CON GRANIZO', 99:'TORMENTA INTENSA'
-  };
-  return map[code] || 'VARIABLE';
+function addMins(str, n) {
+  let m = minsFromMidnight(str) + n;
+  m = ((m % 1440) + 1440) % 1440;
+  return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
 }
 
-function wmoToSymbol(code) {
-  if (code === 0) return '○';
-  if (code <= 2) return '◑';
-  if (code === 3) return '●';
-  if (code <= 48) return '≋';
-  if (code <= 55) return '·';
-  if (code <= 65) return '⌇';
-  if (code <= 77) return '❄';
-  if (code <= 82) return '⌇';
-  if (code <= 86) return '❄';
+const WMO_TEXT = {
+  0:'DESPEJADO',1:'CASI DESPEJADO',2:'PARCIALMENTE NUBLADO',3:'NUBLADO',
+  45:'NIEBLA',48:'NIEBLA HELADA',
+  51:'LLOVIZNA DÉBIL',53:'LLOVIZNA',55:'LLOVIZNA DENSA',
+  61:'LLUVIA DÉBIL',63:'LLUVIA',65:'LLUVIA FUERTE',
+  71:'NIEVE DÉBIL',73:'NIEVE',75:'NIEVE INTENSA',77:'AGUANIEVE',
+  80:'CHUBASCOS',81:'CHUBASCOS FUERTES',82:'CHUBASCOS VIOLENTOS',
+  85:'NEVADA',86:'NEVADA INTENSA',
+  95:'TORMENTA',96:'TORMENTA CON GRANIZO',99:'TORMENTA INTENSA'
+};
+
+function wmoTxt(c) { return WMO_TEXT[c] || 'VARIABLE'; }
+
+function wmoSym(c) {
+  if(c===0) return '○';
+  if(c<=2) return '◑';
+  if(c===3) return '●';
+  if(c<=48) return '≋';
+  if(c<=55) return '·';
+  if(c<=65) return '⌇';
+  if(c<=77) return '❄';
+  if(c<=82) return '⌇';
   return '⚡';
 }
 
-function uvLabel(uv) {
-  if (uv <= 2) return 'BAJA';
-  if (uv <= 5) return 'MODERADA';
-  if (uv <= 7) return 'ALTA';
-  if (uv <= 10) return 'MUY ALTA';
-  return 'EXTREMA';
+function uvInfo(uv) {
+  const v = Number(uv);
+  if(v <= 2) return {lbl:'BAJA', pct: v/11*100};
+  if(v <= 5) return {lbl:'MODERADA', pct: v/11*100};
+  if(v <= 7) return {lbl:'ALTA — usa protector', pct: v/11*100};
+  if(v <= 10) return {lbl:'MUY ALTA — protector 50+', pct: v/11*100};
+  return {lbl:'EXTREMA — evita el sol', pct:100};
 }
 
-function pressureLabel(p) {
-  if (p < 1000) return 'BAJA · TIEMPO INESTABLE';
-  if (p < 1013) return 'NORMAL-BAJA';
-  if (p < 1020) return 'NORMAL';
-  return 'ALTA · TIEMPO ESTABLE';
+function presLbl(p) {
+  if(p < 1000) return 'BAJA · INESTABLE';
+  if(p < 1013) return 'NORMAL-BAJA';
+  if(p < 1020) return 'NORMAL';
+  return 'ALTA · ESTABLE';
 }
 
-function cloudLabel(c) {
-  if (c < 10) return 'CIELO DESPEJADO';
-  if (c < 30) return 'POCO NUBOSO';
-  if (c < 60) return 'PARCIALMENTE NUBLADO';
-  if (c < 85) return 'NUBLADO';
+function cloudLbl(c) {
+  if(c < 10) return 'DESPEJADO';
+  if(c < 30) return 'POCO NUBOSO';
+  if(c < 60) return 'PARCIALMENTE NUBLADO';
+  if(c < 85) return 'NUBLADO';
   return 'CIELO CUBIERTO';
 }
 
-function dewLabel(dew, temp) {
-  const diff = temp - dew;
-  if (diff < 3) return 'CONDENSACIÓN INMINENTE';
-  if (diff < 8) return 'HUMEDAD NOTABLE';
-  if (diff < 15) return 'CONFORT NORMAL';
+function dewLbl(dew, temp) {
+  const d = temp - dew;
+  if(d < 3) return 'CONDENSACIÓN INMINENTE';
+  if(d < 8) return 'AMBIENTE HÚMEDO';
+  if(d < 15) return 'CONFORT NORMAL';
   return 'AMBIENTE SECO';
 }
 
-function moonPhase(date) {
-  const known = new Date('2000-01-06');
-  const diff = (date - known) / (1000 * 60 * 60 * 24);
-  const cycle = 29.53058867;
-  const phase = ((diff % cycle) + cycle) % cycle;
-  const pct = phase / cycle;
-
-  if (pct < 0.025 || pct > 0.975) return { name: 'LUNA NUEVA',        sym: '🌑', detail: 'La luna no es visible. Noches oscuras, ideales para observar estrellas.' };
-  if (pct < 0.25)                  return { name: 'CUARTO CRECIENTE',  sym: '🌒', detail: `Iluminación ~${fmt(pct*4*100)}%. La luna crece hacia la izquierda.` };
-  if (pct < 0.275)                 return { name: 'CUARTO CRECIENTE',  sym: '🌓', detail: 'Exactamente mitad iluminada. La luna sale al mediodía.' };
-  if (pct < 0.5)                   return { name: 'LUNA GIBOSA CRECIENTE', sym: '🌔', detail: `Iluminación ~${fmt((0.5-pct)*4*100+50)}%. Muy brillante al anochecer.` };
-  if (pct < 0.525)                 return { name: 'LUNA LLENA',        sym: '🌕', detail: 'Iluminación máxima. Mareas vivas. Lúpercalia y rituales históricos.' };
-  if (pct < 0.75)                  return { name: 'LUNA GIBOSA MENGUANTE', sym: '🌖', detail: 'Iluminación decreciente. Sale más tarde cada noche.' };
-  if (pct < 0.775)                 return { name: 'CUARTO MENGUANTE',  sym: '🌗', detail: 'Sale a medianoche. Mitad oscura hacia el oeste.' };
-  return                                  { name: 'LUNA MENGUANTE',    sym: '🌘', detail: 'Últimos días del ciclo. Sale de madrugada.' };
-}
-
-function aqiLabel(aqi) {
-  if (aqi <= 20) return 'BUENA';
-  if (aqi <= 40) return 'RAZONABLE';
-  if (aqi <= 60) return 'MODERADA';
-  if (aqi <= 80) return 'POBRE';
-  if (aqi <= 100) return 'MUY POBRE';
+function aqiLbl(a) {
+  if(a<=20) return 'BUENA';
+  if(a<=40) return 'RAZONABLE';
+  if(a<=60) return 'MODERADA';
+  if(a<=80) return 'POBRE';
+  if(a<=100) return 'MUY POBRE';
   return 'EXTREMADAMENTE POBRE';
 }
 
-function addMinutes(timeStr, mins) {
-  const [h, m] = timeStr.split(':').map(Number);
-  const total = h * 60 + m + mins;
-  const nh = Math.floor(total / 60) % 24;
-  const nm = total % 60;
-  return `${String(nh).padStart(2,'0')}:${String(nm).padStart(2,'0')}`;
+// ── MOON ─────────────────────────────────────────────────────────────────────
+function moonPhase(date) {
+  const known = new Date('2000-01-06T00:00:00Z');
+  const days = (date - known) / 86400000;
+  const cycle = 29.53058867;
+  const phase = ((days % cycle) + cycle) % cycle;
+  const pct = Math.round((phase / cycle) * 100);
+
+  let sym, name, txt;
+  if (phase < 1.85 || phase > 27.68) {
+    sym='🌑'; name='LUNA NUEVA';
+    txt='La luna no es visible. Perfecta para la astronomía, el cielo es completamente oscuro.';
+  } else if (phase < 7.38) {
+    sym='🌒'; name='CRECIENTE';
+    txt='La luna crece hacia la derecha. Visible al atardecer en el hemisferio norte.';
+  } else if (phase < 9.22) {
+    sym='🌓'; name='CUARTO CRECIENTE';
+    txt='Exactamente mitad iluminada. Sale al mediodía y se pone a medianoche.';
+  } else if (phase < 14.77) {
+    sym='🌔'; name='GIBOSA CRECIENTE';
+    txt='Más de mitad iluminada y creciendo. Mareas vivas en aumento.';
+  } else if (phase < 16.61) {
+    sym='🌕'; name='LUNA LLENA';
+    txt='Iluminación máxima (100%). Produce mareas vivas y fue adorada por culturas de todo el mundo.';
+  } else if (phase < 22.15) {
+    sym='🌖'; name='GIBOSA MENGUANTE';
+    txt='Brilla desde medianoche. Sale más tarde cada noche que pasa.';
+  } else if (phase < 23.99) {
+    sym='🌗'; name='CUARTO MENGUANTE';
+    txt='Sale a medianoche y se pone al mediodía. Mitad oscura hacia el este.';
+  } else {
+    sym='🌘'; name='MENGUANTE';
+    txt='Últimos días del ciclo lunar. Solo visible de madrugada antes del amanecer.';
+  }
+
+  return { sym, name, pct, txt };
 }
 
-function subMinutes(timeStr, mins) { return addMinutes(timeStr, -mins); }
-
-function timeDiff(t1, t2) {
-  const [h1,m1] = t1.split(':').map(Number);
-  const [h2,m2] = t2.split(':').map(Number);
-  return (h2*60+m2) - (h1*60+m1);
-}
-
-const CURIOSITIES = [
-  { text: 'La presión atmosférica a nivel del mar es de 1013.25 hPa. Cada 10 m de altitud, la presión disminuye ~1.2 hPa.', bg: 'hPa' },
-  { text: 'El viento de Beaufort 0 (calma total) significa que el humo sube verticalmente. A escala 12, los árboles son arrancados de raíz.', bg: 'BFT' },
-  { text: 'El punto de rocío es la temperatura a la que el aire se satura. Si el rocío iguala la temperatura, hay niebla o lluvia inminente.', bg: 'ROC' },
-  { text: 'El índice UV fue estandarizado por la OMS en 1994. UV>11 puede causar quemaduras en menos de 10 minutos en piel sin protección.', bg: 'UV' },
-  { text: 'La nube cumulonimbus puede alcanzar 18 km de altura, atravesando toda la troposfera. Genera rayos, granizo y vientos huracanados.', bg: 'CB' },
-  { text: 'El fenómeno del rayo globular sigue sin explicación científica definitiva. Se han documentado esferas luminosas de hasta 50 cm que duran varios segundos.', bg: '⚡' },
-  { text: 'El color del cielo nocturno nunca es negro puro: la luz zodiacal, la bioluminiscencia y los fotones cósmicos lo tiñen levemente de azul verdoso.', bg: '★' },
-  { text: 'La lluvia en caída libre forma esferas casi perfectas de 2 mm. Gotas mayores colapsan en forma de hamburguesa por la resistencia del aire.', bg: 'H₂O' },
-  { text: 'El "petricor" (olor a tierra mojada) está producido por la geosmina, un compuesto orgánico liberado por bacterias del suelo al contacto con la lluvia.', bg: '∿' },
-  { text: 'La hora dorada dura literalmente "una hora" solo en latitudes medias. Cerca del Ecuador puede durar 20 minutos; en el Ártico, horas enteras.', bg: 'AU' },
+// ── CURIOSIDADES ──────────────────────────────────────────────────────────────
+const CURIOS = [
+  {t:'La presión de 1013 hPa es el estándar atmosférico a nivel del mar. Cada 8.5 km de altitud, la presión se reduce a la mitad.', b:'hPa'},
+  {t:'El índice UV fue estandarizado por la OMS en 1994. Un UV de 11 puede causar quemaduras en menos de 10 minutos con piel sin protección.', b:'UV'},
+  {t:'El "petricor" (olor a tierra mojada) lo produce la geosmina, liberada por bacterias del suelo actinomicetas al contacto con la lluvia.', b:'∿'},
+  {t:'Una cumulonimbus puede alcanzar 18 km de altura, atravesando toda la troposfera. Genera rayos, granizo y vientos de más de 200 km/h.', b:'CB'},
+  {t:'La hora dorada dura ~60 min en latitudes medias. Cerca del ecuador puede ser 20 min; en el Ártico en verano puede durar horas enteras.', b:'AU'},
+  {t:'El viento Föhn en los Alpes puede elevar la temperatura 10°C en pocas horas al bajar por la ladera de sotavento de una montaña.', b:'FÖN'},
+  {t:'La lluvia en caída libre forma esferas casi perfectas de 2mm. Gotas mayores se aplastan como hamburguesas por la resistencia del aire.', b:'H₂O'},
+  {t:'El punto de rocío es más fiable que la humedad relativa para medir confort térmico: por encima de 20°C de rocío la sensación es sofocante.', b:'ROC'},
+  {t:'El rayo puede alcanzar 30.000°C, cinco veces la temperatura superficial del Sol. Un rayo descarga unos 5 gigajulios de energía.', b:'⚡'},
+  {t:'El niebla no es más que una nube a ras de suelo. Técnicamente se llama niebla cuando la visibilidad cae por debajo de 1 kilómetro.', b:'≋'},
 ];
 
-// ─── LOADER ──────────────────────────────────────────────────────────────────
-
-function setLoader(msg, pct) {
-  document.getElementById('loader-msg').textContent = msg;
-  document.getElementById('loader-bar').style.width = pct + '%';
+// ── LOADER ────────────────────────────────────────────────────────────────────
+function setLoad(msg, pct) {
+  $('lmsg').textContent = msg;
+  $('lbar').style.width = pct + '%';
 }
 
 function hideLoader() {
-  const l = document.getElementById('loader');
-  l.classList.add('hide');
-  setTimeout(() => l.remove(), 600);
-  const app = document.getElementById('app');
-  app.classList.add('visible');
+  $('loader').classList.add('hide');
+  setTimeout(() => $('loader').remove(), 600);
+  $('app').classList.add('visible');
 }
 
-function showError(msg) {
-  document.getElementById('loader').classList.add('hide');
-  setTimeout(() => document.getElementById('loader').remove(), 600);
-  const e = document.getElementById('error-msg');
-  e.style.display = 'block';
-  if (msg) document.getElementById('error-text').innerHTML = msg;
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function swTab(t) {
+  $('ph').style.display = t==='h' ? 'block' : 'none';
+  $('pw').style.display = t==='w' ? 'block' : 'none';
+  $('tab-h').className = 'tab' + (t==='h'?' on':'');
+  $('tab-w').className = 'tab' + (t==='w'?' on':'');
 }
 
-// ─── TABS ────────────────────────────────────────────────────────────────────
-
-function switchTab(t) {
-  document.getElementById('panel-hour').style.display = t === 'hour' ? 'block' : 'none';
-  document.getElementById('panel-week').style.display = t === 'week' ? 'block' : 'none';
-  document.getElementById('tab-hour').className = 'tab' + (t === 'hour' ? ' on' : '');
-  document.getElementById('tab-week').className = 'tab' + (t === 'week' ? ' on' : '');
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+async function requestNotif() {
+  if (!('Notification' in window)) {
+    alert('Tu navegador no soporta notificaciones. Instala la app desde Safari en iPhone para activarlas.');
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    $('notif-banner').style.display = 'none';
+    localStorage.setItem('wx-notif', '1');
+    scheduleNotif();
+    alert('¡Notificaciones activadas! Recibirás el resumen cada mañana a las 8:00 cuando abras la app.');
+  } else {
+    alert('Permiso denegado. Puedes activarlo en Ajustes > Safari > Notificaciones.');
+  }
 }
 
-// ─── MAIN ────────────────────────────────────────────────────────────────────
+function scheduleNotif() {
+  if (Notification.permission !== 'granted') return;
+  const now = new Date();
+  const next8 = new Date(now);
+  next8.setHours(8, 0, 0, 0);
+  if (now >= next8) next8.setDate(next8.getDate() + 1);
+  const delay = next8 - now;
+  setTimeout(() => {
+    sendMorningNotif();
+    setInterval(sendMorningNotif, 24 * 60 * 60 * 1000);
+  }, delay);
+}
 
-document.getElementById('footer-year').textContent = new Date().getFullYear();
+function sendMorningNotif() {
+  const temp = $('temp').textContent;
+  const cond = $('cond').textContent;
+  const city = $('city-name').textContent;
+  const uv = $('uv-val').textContent;
+  const wind = $('s-wind').textContent;
+  new Notification(`☀ Buenos días · WX`, {
+    body: `${city}: ${temp}°C · ${cond}\nViento ${wind} · UV ${uv}\nAbre WX para el pronóstico completo`,
+    icon: './icon-192.svg',
+    badge: './icon-192.svg',
+  });
+}
+
+// ── MAIN ──────────────────────────────────────────────────────────────────────
+$('yr').textContent = new Date().getFullYear();
+
+// Show notif banner if not yet granted
+if ('Notification' in window && Notification.permission !== 'granted' && !localStorage.getItem('wx-notif-dismissed')) {
+  $('notif-banner').style.display = 'block';
+}
+if (localStorage.getItem('wx-notif') === '1' && Notification.permission === 'granted') {
+  scheduleNotif();
+}
 
 async function run() {
-  setLoader('OBTENIENDO UBICACIÓN...', 10);
+  setLoad('OBTENIENDO UBICACIÓN...', 10);
 
-  // 1. Geolocation
   let lat, lon;
   try {
     const pos = await new Promise((res, rej) =>
-      navigator.geolocation.getCurrentPosition(res, rej, { timeout: 12000 })
+      navigator.geolocation.getCurrentPosition(res, rej, {timeout:12000, enableHighAccuracy:true})
     );
     lat = pos.coords.latitude;
     lon = pos.coords.longitude;
   } catch(e) {
-    showError('No se pudo acceder a tu ubicación.<br/>Activa el GPS y recarga la página.');
+    $('loader').classList.add('hide');
+    setTimeout(() => $('loader').remove(), 500);
+    $('app').classList.add('visible');
+    $('city-name').textContent = 'SIN GPS';
+    $('updated').textContent = 'ACTIVA EL GPS Y RECARGA';
     return;
   }
 
-  setLoader('LOCALIZANDO CIUDAD...', 30);
+  setLoad('LOCALIZANDO...', 28);
 
-  // 2. Reverse geocoding (Nominatim)
-  let cityName = 'MI UBICACIÓN', countryCode = '';
+  // Geocoding
+  let city = 'MI UBICACIÓN', cc = '';
   try {
-    const geoRes = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
-      { headers: { 'Accept-Language': 'es' } }
-    );
-    const geo = await geoRes.json();
-    const a = geo.address;
-    cityName = (a.city || a.town || a.village || a.county || 'MI UBICACIÓN').toUpperCase();
-    countryCode = (a.country_code || '').toUpperCase();
+    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+      {headers:{'Accept-Language':'es'}});
+    const g = await r.json();
+    const a = g.address;
+    city = (a.city||a.town||a.village||a.county||'MI UBICACIÓN').toUpperCase();
+    cc = (a.country_code||'').toUpperCase();
   } catch(_) {}
 
-  document.getElementById('city-name').textContent = cityName;
-  document.getElementById('loc-label').textContent = countryCode || 'GPS';
+  $('city-name').textContent = city;
+  $('loc-lbl').textContent = cc || 'GPS';
 
-  setLoader('DESCARGANDO DATOS...', 55);
+  setLoad('DESCARGANDO TIEMPO...', 52);
 
-  // 3. Weather (Open-Meteo)
-  const weatherUrl =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,` +
-    `weather_code,surface_pressure,wind_speed_10m,wind_gusts_10m,cloud_cover,` +
-    `visibility,uv_index,dew_point_2m` +
-    `&hourly=temperature_2m,weather_code,precipitation_probability` +
-    `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,` +
-    `precipitation_probability_max,uv_index_max` +
-    `&timezone=auto&forecast_days=7`;
+  const wUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
+    + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,`
+    + `weather_code,surface_pressure,wind_speed_10m,wind_gusts_10m,cloud_cover,`
+    + `visibility,uv_index,dew_point_2m`
+    + `&hourly=temperature_2m,weather_code,precipitation_probability`
+    + `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,`
+    + `precipitation_probability_max,uv_index_max`
+    + `&timezone=auto&forecast_days=7`;
 
-  // 4. Air quality (Open-Meteo)
-  const aqUrl =
-    `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}` +
-    `&current=european_aqi,pm2_5,pm10&timezone=auto`;
+  const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}`
+    + `&current=european_aqi,pm2_5,pm10&timezone=auto`;
 
   let wx, aq;
   try {
     [wx, aq] = await Promise.all([
-      fetch(weatherUrl).then(r => r.json()),
-      fetch(aqUrl).then(r => r.json()),
+      fetch(wUrl).then(r=>r.json()),
+      fetch(aqUrl).then(r=>r.json()),
     ]);
   } catch(e) {
-    showError('No se pudieron descargar los datos meteorológicos.<br/>Comprueba tu conexión.');
+    $('updated').textContent = 'ERROR AL DESCARGAR DATOS';
+    hideLoader();
     return;
   }
 
-  setLoader('PROCESANDO...', 85);
+  setLoad('PROCESANDO...', 82);
 
   const c = wx.current;
   const d = wx.daily;
@@ -907,148 +661,124 @@ async function run() {
   const now = new Date();
 
   // ── CURRENT ──
-  document.getElementById('temp-now').textContent = fmt(c.temperature_2m);
-  document.getElementById('condition-text').textContent = wmoToText(c.weather_code);
-  document.getElementById('hi-lo').textContent =
-    `↑${fmt(d.temperature_2m_max[0])}° ↓${fmt(d.temperature_2m_min[0])}°`;
-  document.getElementById('s-feels').textContent = fmt(c.apparent_temperature) + '°';
-  document.getElementById('s-humid').textContent = fmt(c.relative_humidity_2m) + '%';
-  document.getElementById('s-wind').textContent = fmt(c.wind_speed_10m) + 'km/h';
-  document.getElementById('s-precip').textContent = fmt(c.precipitation, 1) + 'mm';
+  $('temp').textContent = f0(c.temperature_2m);
+  $('cond').textContent = wmoTxt(c.weather_code);
+  $('hilo').textContent = `↑${f0(d.temperature_2m_max[0])}° ↓${f0(d.temperature_2m_min[0])}°`;
+  $('s-feels').textContent = f0(c.apparent_temperature) + '°';
+  $('s-hum').textContent = f0(c.relative_humidity_2m) + '%';
+  $('s-wind').textContent = f0(c.wind_speed_10m) + 'km/h';
+  $('s-prec').textContent = f1(c.precipitation) + 'mm';
+  $('updated').textContent = 'ACTUALIZADO · ' + now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
 
-  const updStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-  document.getElementById('updated-time').textContent = `ACTUALIZADO · ${updStr}`;
+  // ── UV (always show raw value first, then label) ──
+  const uvRaw = c.uv_index != null ? c.uv_index : 0;
+  const uvI = uvInfo(uvRaw);
+  $('uv-val').textContent = f1(uvRaw);
+  $('uv-lbl').textContent = uvI.lbl;
+  $('uv-bar').style.width = Math.min(uvI.pct, 100) + '%';
 
-  // ── STATS ──
-  document.getElementById('st-pressure').textContent = fmt(c.surface_pressure) + ' hPa';
-  document.getElementById('st-pressure-sub').textContent = pressureLabel(c.surface_pressure);
-  document.getElementById('st-uv').textContent = fmt(c.uv_index, 1);
-  document.getElementById('st-uv-sub').textContent = uvLabel(c.uv_index);
-  document.getElementById('st-vis').textContent = fmt(c.visibility / 1000, 1);
-  document.getElementById('st-dew').textContent = fmt(c.dew_point_2m) + '°';
-  document.getElementById('st-dew-sub').textContent = dewLabel(c.dew_point_2m, c.temperature_2m);
-  document.getElementById('st-cloud').textContent = c.cloud_cover + '%';
-  document.getElementById('st-cloud-sub').textContent = cloudLabel(c.cloud_cover);
-  document.getElementById('st-gust').textContent = fmt(c.wind_gusts_10m);
+  // ── OTHER STATS ──
+  $('st-pres').textContent = f0(c.surface_pressure) + ' hPa';
+  $('st-pres-s').textContent = presLbl(c.surface_pressure);
+  $('st-vis').textContent = f1(c.visibility / 1000);
+  $('st-dew').textContent = f0(c.dew_point_2m) + '°';
+  $('st-dew-s').textContent = dewLbl(c.dew_point_2m, c.temperature_2m);
+  $('st-cloud').textContent = c.cloud_cover + '%';
+  $('st-cloud-s').textContent = cloudLbl(c.cloud_cover);
+  $('st-gust').textContent = f0(c.wind_gusts_10m);
 
   // ── HOURLY ──
-  const hourlyEl = document.getElementById('hourly-list');
-  const nowHour = now.getHours();
-  let startIdx = h.time.findIndex(t => new Date(t).getHours() === nowHour);
-  if (startIdx < 0) startIdx = 0;
-
-  for (let i = startIdx; i < Math.min(startIdx + 24, h.time.length); i++) {
-    const item = document.createElement('div');
-    item.className = 'h-item' + (i === startIdx ? ' now' : '');
-    item.innerHTML = `
-      <div class="h-time">${fmtHour(h.time[i])}</div>
-      <div class="h-symbol">${wmoToSymbol(h.weather_code[i])}</div>
-      <div class="h-temp">${fmt(h.temperature_2m[i])}°</div>
-      <div class="h-precip">${h.precipitation_probability[i]}%</div>
-    `;
-    hourlyEl.appendChild(item);
+  const hEl = $('hourly');
+  const nowH = now.getHours();
+  let si = h.time.findIndex(t => new Date(t).getHours() === nowH);
+  if(si < 0) si = 0;
+  for(let i = si; i < Math.min(si+24, h.time.length); i++) {
+    const el = document.createElement('div');
+    el.className = 'hi' + (i===si?' now':'');
+    const label = i===si ? 'AHORA' : new Date(h.time[i]).getHours()+'H';
+    el.innerHTML = `<div class="ht">${label}</div><div class="hs">${wmoSym(h.weather_code[i])}</div><div class="hv">${f0(h.temperature_2m[i])}°</div><div class="hp">${h.precipitation_probability[i]}%</div>`;
+    hEl.appendChild(el);
   }
 
   // ── WEEKLY ──
-  const weekEl = document.getElementById('weekly-list');
-  const days = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
-  const allHighs = d.temperature_2m_max;
-  const allLows  = d.temperature_2m_min;
-  const maxTemp = Math.max(...allHighs);
-  const minTemp = Math.min(...allLows);
-  const range = maxTemp - minTemp || 1;
-
-  d.time.forEach((date, i) => {
-    const dayName = i === 0 ? 'HOY' : days[new Date(date).getDay()];
-    const barPct = ((d.temperature_2m_max[i] - minTemp) / range * 100).toFixed(0);
+  const wEl = $('weekly');
+  const DAYS = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+  const maxH = Math.max(...d.temperature_2m_max);
+  const minL = Math.min(...d.temperature_2m_min);
+  const rng = maxH - minL || 1;
+  d.time.forEach((date,i) => {
+    const day = i===0 ? 'HOY' : DAYS[new Date(date+'T12:00:00').getDay()];
+    const pct = ((d.temperature_2m_max[i]-minL)/rng*100).toFixed(0);
     const row = document.createElement('div');
-    row.className = 'week-row';
-    row.innerHTML = `
-      <div class="week-day">${dayName}</div>
-      <div class="week-symbol">${wmoToSymbol(d.weather_code[i])}</div>
-      <div class="week-bar-wrap">
-        <div class="week-lo">${fmt(d.temperature_2m_min[i])}°</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
-        <div class="week-hi">${fmt(d.temperature_2m_max[i])}°</div>
-      </div>
-      <div class="week-precip">${d.precipitation_probability_max[i]}%💧</div>
-    `;
-    weekEl.appendChild(row);
+    row.className = 'wr';
+    row.innerHTML = `<div class="wd">${day}</div><div class="wsym">${wmoSym(d.weather_code[i])}</div><div class="wbw"><div class="wlo">${f0(d.temperature_2m_min[i])}°</div><div class="btr"><div class="btf" style="width:${pct}%"></div></div><div class="whi">${f0(d.temperature_2m_max[i])}°</div></div><div class="wpp">${d.precipitation_probability_max[i]}%</div>`;
+    wEl.appendChild(row);
   });
 
-  // ── SUN ──
-  const srRaw = d.sunrise[0];
-  const ssRaw = d.sunset[0];
-  const srStr = fmtTime(srRaw);
-  const ssStr = fmtTime(ssRaw);
-  document.getElementById('sunrise').textContent = srStr;
-  document.getElementById('sunset').textContent = ssStr;
-  document.getElementById('dawn').textContent = 'alba ' + subMinutes(srStr, 30);
-  document.getElementById('dusk').textContent = 'ocaso ' + addMinutes(ssStr, 20);
+  // ── SUN ARC ──
+  const srStr = fmtTime(d.sunrise[0]);
+  const ssStr = fmtTime(d.sunset[0]);
+  $('sunrise').textContent = srStr;
+  $('sunset').textContent = ssStr;
+  $('dawn-lbl').textContent = 'alba ' + addMins(srStr,-28);
+  $('dusk-lbl').textContent = 'ocaso ' + addMins(ssStr,20);
 
-  const daylightMins = timeDiff(srStr, ssStr);
-  const dlH = Math.floor(daylightMins / 60);
-  const dlM = daylightMins % 60;
-  document.getElementById('daylight-hours').textContent =
-    `HORAS DE LUZ · ${dlH}H ${dlM}MIN`;
+  const srM = minsFromMidnight(srStr);
+  const ssM = minsFromMidnight(ssStr);
+  const nowM = now.getHours()*60 + now.getMinutes();
+  const prog = Math.max(0, Math.min(1, (nowM - srM) / (ssM - srM)));
+  const dlMin = ssM - srM;
+  $('daylight').textContent = `HORAS DE LUZ · ${Math.floor(dlMin/60)}H ${dlMin%60}MIN`;
 
-  // Arc animation
-  const nowMins = now.getHours() * 60 + now.getMinutes();
-  const srMins = parseInt(srStr) * 60 + parseInt(srStr.split(':')[1]);
-  const ssMins = parseInt(ssStr) * 60 + parseInt(ssStr.split(':')[1]);
-  const progress = Math.max(0, Math.min(1, (nowMins - srMins) / (ssMins - srMins)));
-  const arcLen = 240;
-  document.getElementById('arc-progress').style.strokeDashoffset = arcLen * (1 - progress);
+  // Animate arc
+  const arcLen = 230;
+  $('arc-prog').style.strokeDashoffset = (arcLen * (1-prog)).toFixed(1);
 
-  // Sun dot position on arc (parametric)
-  const t = progress;
-  const x = 10 + 180 * t;
-  const y = 65 - Math.sin(Math.PI * t) * 80;
-  document.getElementById('sun-dot').setAttribute('cx', x.toFixed(1));
-  document.getElementById('sun-dot').setAttribute('cy', y.toFixed(1));
+  // Sun dot on quadratic bezier: P0=(12,66) P1=(100,-8) P2=(188,66)
+  const t = prog;
+  const sx = (1-t)*(1-t)*12 + 2*(1-t)*t*100 + t*t*188;
+  const sy = (1-t)*(1-t)*66 + 2*(1-t)*t*(-8) + t*t*66;
+  $('sun-dot').setAttribute('cx', sx.toFixed(1));
+  $('sun-dot').setAttribute('cy', sy.toFixed(1));
+  $('sun-dot2').setAttribute('cx', sx.toFixed(1));
+  $('sun-dot2').setAttribute('cy', sy.toFixed(1));
 
   // ── GOLDEN HOUR ──
-  const goldenAmStart = subMinutes(srStr, 5);
-  const goldenAmEnd   = addMinutes(srStr, 55);
-  const goldenPmStart = subMinutes(ssStr, 55);
-  const goldenPmEnd   = addMinutes(ssStr, 5);
-  document.getElementById('golden-am').textContent = goldenAmStart;
-  document.getElementById('golden-am-dur').textContent = `hasta ${goldenAmEnd} · ~60 min`;
-  document.getElementById('golden-pm').textContent = goldenPmStart;
-  document.getElementById('golden-pm-dur').textContent = `hasta ${goldenPmEnd} · ~60 min`;
+  $('gam').textContent = addMins(srStr,-3);
+  $('gam-d').textContent = `hasta ${addMins(srStr,57)} · ~60 min`;
+  $('gpm').textContent = addMins(ssStr,-57);
+  $('gpm-d').textContent = `hasta ${addMins(ssStr,3)} · ~60 min`;
 
   // ── MOON ──
   const moon = moonPhase(now);
-  document.getElementById('moon-symbol').textContent = moon.sym;
-  document.getElementById('moon-phase-name').textContent = moon.name;
-  document.getElementById('moon-detail').textContent = moon.detail;
+  $('moon-sym').textContent = moon.sym;
+  $('moon-name').textContent = moon.name;
+  $('moon-bar').style.width = moon.pct + '%';
+  $('moon-pct').textContent = moon.pct + '%';
+  $('moon-txt').textContent = moon.txt;
+
+  // ── CURIOSITY ──
+  const cur = CURIOS[now.getDate() % CURIOS.length];
+  $('cur-txt').textContent = cur.t;
+  $('cur-bg').textContent = cur.b;
 
   // ── AQI ──
   const aqi = aq.current?.european_aqi ?? 0;
-  const pm25 = aq.current?.pm2_5 ?? 0;
-  const pm10 = aq.current?.pm10 ?? 0;
-  document.getElementById('aqi-val').textContent = fmt(aqi);
-  document.getElementById('aqi-label').textContent = aqiLabel(aqi);
-  document.getElementById('aqi-fill').style.width = Math.min(aqi, 100) + '%';
-  document.getElementById('aqi-pm25').textContent = fmt(pm25, 1);
-  document.getElementById('aqi-pm10').textContent = fmt(pm10, 1);
+  $('aqi-v').textContent = f0(aqi);
+  $('aqi-l').textContent = aqiLbl(aqi);
+  $('aqi-bar').style.width = Math.min(aqi, 100) + '%';
+  $('pm25').textContent = f1(aq.current?.pm2_5 ?? 0);
+  $('pm10').textContent = f1(aq.current?.pm10 ?? 0);
 
-  // ── CURIOSITY ──
-  const cur = CURIOSITIES[now.getDate() % CURIOSITIES.length];
-  document.getElementById('curiosity-text').textContent = cur.text;
-  document.getElementById('curiosity-bg').textContent = cur.bg;
-
-  setLoader('LISTO', 100);
-  setTimeout(hideLoader, 400);
+  setLoad('LISTO', 100);
+  setTimeout(hideLoader, 350);
 }
 
-// PWA service worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 
 run();
 </script>
-
 </body>
 </html>
