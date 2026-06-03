@@ -904,15 +904,116 @@
       letter-spacing:0.08em;text-align:center;
       padding:20px;
     }
+    /* ── PULL TO REFRESH ─────────────────────────── */
+    .ptr-indicator{
+      position:fixed;top:0;left:0;right:0;
+      display:flex;justify-content:center;align-items:center;
+      height:0;overflow:hidden;
+      transition:height 0.25s ease;
+      z-index:50;pointer-events:none;
+    }
+    .ptr-indicator.visible{height:60px;}
+    .ptr-arrow{
+      width:22px;height:22px;
+      color:var(--g4);
+      transition:transform 0.2s ease;
+    }
+    .ptr-indicator.ready .ptr-arrow{
+      transform:rotate(180deg);
+      color:#000;
+    }
+    .ptr-indicator.refreshing .ptr-arrow{
+      animation:ptrSpin 0.8s linear infinite;
+      color:#000;
+    }
+    @keyframes ptrSpin{
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+
+    /* ── PROGRESS BAR (top) ──────────────────────── */
+    .progress-bar{
+      position:fixed;top:0;left:0;right:0;
+      height:2px;background:transparent;
+      z-index:200;
+    }
+    .progress-bar-fill{
+      height:100%;background:var(--blue);
+      width:0%;
+      transition:width 0.3s ease, opacity 0.4s ease;
+      box-shadow:0 0 8px rgba(42,127,212,0.4);
+    }
+    .progress-bar-fill.done{opacity:0;}
+
+    /* ── SKELETON LOADERS ────────────────────────── */
+    .skeleton{
+      background:linear-gradient(90deg,
+        var(--g1) 0%,
+        var(--g2) 50%,
+        var(--g1) 100%);
+      background-size:200% 100%;
+      animation:skeletonPulse 1.5s ease-in-out infinite;
+      border-radius:6px;
+      color:transparent !important;
+      pointer-events:none;
+    }
+    .skeleton-block{display:inline-block;height:1em;min-width:40px;}
+    @keyframes skeletonPulse{
+      0%{background-position:200% 0;}
+      100%{background-position:-200% 0;}
+    }
+
+    /* Special skeleton for big temperature */
+    .temp-mega.skeleton-temp{
+      background:linear-gradient(90deg,
+        var(--g1) 0%,
+        var(--g2) 50%,
+        var(--g1) 100%);
+      background-size:200% 100%;
+      animation:skeletonPulse 1.5s ease-in-out infinite;
+      color:transparent !important;
+      -webkit-background-clip:text;
+      background-clip:text;
+      border-radius:12px;
+    }
+
+    /* ── BREATHING ICONS ─────────────────────────── */
+    .hero-icon{
+      animation:iconBreath 5s ease-in-out infinite;
+    }
+    @keyframes iconBreath{
+      0%,100%{transform:scale(1);filter:drop-shadow(0 2px 8px rgba(0,0,0,0.08));}
+      50%{transform:scale(1.03);filter:drop-shadow(0 3px 12px rgba(0,0,0,0.12));}
+    }
+    .moon-sym{
+      animation:moonBreath 6s ease-in-out infinite;
+      display:inline-block;
+    }
+    @keyframes moonBreath{
+      0%,100%{transform:scale(1);filter:drop-shadow(0 1px 4px rgba(0,0,0,0.1));}
+      50%{transform:scale(1.04);filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15));}
+    }
+    /* respect prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-icon, .moon-sym, .skeleton, .temp-mega.skeleton-temp{
+        animation:none;
+      }
+    }
   </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="l-logo">WX</div>
-  <div class="l-track"><div class="l-fill" id="lbar"></div></div>
-  <div class="l-msg" id="lmsg">INICIANDO...</div>
+<!-- PROGRESS BAR -->
+<div class="progress-bar">
+  <div class="progress-bar-fill" id="progress-fill"></div>
+</div>
+
+<!-- PULL TO REFRESH INDICATOR -->
+<div class="ptr-indicator" id="ptr-indicator">
+  <svg class="ptr-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19"/>
+    <polyline points="19,12 12,19 5,12"/>
+  </svg>
 </div>
 
 <!-- SEARCH MODAL -->
@@ -929,7 +1030,7 @@
 </div>
 
 <!-- APP -->
-<div id="app">
+<div id="app" class="visible">
 
   <div class="hdr">
     <div class="logo">WX</div>
@@ -946,8 +1047,8 @@
   </div>
 
   <div class="city-block">
-    <div class="city" id="city-name">—</div>
-    <div class="updated" id="updated">—</div>
+    <div class="city" id="city-name"><span class="skeleton skeleton-block" style="width:120px;">—</span></div>
+    <div class="updated" id="updated"><span class="skeleton skeleton-block" style="width:140px;height:10px;">—</span></div>
     <div class="back-to-gps" id="back-to-gps" onclick="useGPS()">↶ VOLVER A MI UBICACIÓN</div>
   </div>
 
@@ -964,7 +1065,7 @@
   <!-- HERO -->
   <div class="card card-hero">
     <div class="hero-top">
-      <span class="hero-cond" id="cond">—</span>
+      <span class="hero-cond" id="cond"><span class="skeleton skeleton-block" style="width:100px;">—</span></span>
       <div class="vs-yesterday" id="vs-yesterday" style="display:none;">
         <span class="arrow" id="vs-arrow">→</span>
         <span id="vs-text">— vs ayer</span>
@@ -973,11 +1074,11 @@
     <div class="hero-main">
       <svg class="hero-icon" id="hero-icon"><use href="#ico-clear"/></svg>
       <div class="temp-row">
-        <span class="temp-mega" id="temp">—</span>
+        <span class="temp-mega skeleton-temp" id="temp">—</span>
         <span class="temp-mega-unit">°</span>
       </div>
     </div>
-    <div class="hilo" id="hilo">—</div>
+    <div class="hilo" id="hilo"><span class="skeleton skeleton-block" style="width:120px;">—</span></div>
     <div class="feels-warning" id="feels-warning">
       <span id="feels-warning-text">—</span>
     </div>
@@ -1606,8 +1707,22 @@ const CURIOS=[
   {t:'Las nubes noctilucentes son las más altas de la atmósfera (~80 km). Solo se ven en verano, en latitudes medias, justo después del atardecer.',b:'NLC'},
 ];
 
-function setLoad(msg,pct){$('lmsg').textContent=msg;$('lbar').style.width=pct+'%';}
-function hideLoader(){$('loader').classList.add('hide');setTimeout(()=>$('loader').remove(),600);$('app').classList.add('visible');animateCards();}
+function setLoad(msg, pct){
+  $('progress-fill').style.width = pct + '%';
+  $('progress-fill').classList.remove('done');
+}
+function hideLoader(){
+  $('progress-fill').style.width = '100%';
+  setTimeout(() => {
+    $('progress-fill').classList.add('done');
+    setTimeout(() => $('progress-fill').style.width = '0%', 400);
+  }, 200);
+  // Remove skeletons after data loads
+  document.querySelectorAll('.skeleton, .skeleton-temp').forEach(el => {
+    el.classList.remove('skeleton', 'skeleton-block', 'skeleton-temp');
+  });
+  animateCards();
+}
 function swTab(t){$('ph').style.display=t==='h'?'block':'none';$('pw').style.display=t==='w'?'block':'none';$('tab-h').className='tab'+(t==='h'?' on':'');$('tab-w').className='tab'+(t==='w'?' on':'');}
 
 // ─── INTERSECTION OBSERVER for card animations ────────
@@ -2072,6 +2187,7 @@ async function run(){
 
   // ── HERO ──
   $('temp').textContent = f0(c.temperature_2m);
+  $('temp').classList.remove('skeleton-temp');
   $('cond').textContent = wmoTxt(c.weather_code);
   $('hilo').innerHTML = `↑ ${f0(d.temperature_2m_max[0])}° <span class="sep">·</span> ↓ ${f0(d.temperature_2m_min[0])}°`;
   $('hero-icon').innerHTML = `<use href="#${wmoIcon(c.weather_code, isNight)}"/>`;
@@ -2263,6 +2379,57 @@ async function run(){
 }
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+// ─── PULL TO REFRESH ──────────────────────────────────
+(function setupPullToRefresh(){
+  let startY = 0;
+  let currentY = 0;
+  let pulling = false;
+  let refreshing = false;
+  const indicator = $('ptr-indicator');
+  const THRESHOLD = 80;
+
+  document.addEventListener('touchstart', e => {
+    if(refreshing) return;
+    if(window.scrollY > 0) { pulling = false; return; }
+    if(e.target.closest('.search-modal, .share-modal, .hscroll, input, textarea')) return;
+    startY = e.touches[0].clientY;
+    pulling = true;
+  }, {passive: true});
+
+  document.addEventListener('touchmove', e => {
+    if(!pulling || refreshing) return;
+    if(window.scrollY > 0) { pulling = false; indicator.style.height = '0px'; return; }
+    currentY = e.touches[0].clientY;
+    const diff = currentY - startY;
+    if(diff > 0){
+      const h = Math.min(diff * 0.5, 100);
+      indicator.classList.add('visible');
+      indicator.style.height = h + 'px';
+      indicator.style.transition = 'none';
+      if(h >= THRESHOLD * 0.6) indicator.classList.add('ready');
+      else indicator.classList.remove('ready');
+    }
+  }, {passive: true});
+
+  document.addEventListener('touchend', () => {
+    if(!pulling || refreshing) return;
+    pulling = false;
+    indicator.style.transition = '';
+    const diff = currentY - startY;
+    if(diff >= THRESHOLD * 0.6){
+      refreshing = true;
+      indicator.classList.remove('ready');
+      indicator.classList.add('refreshing');
+      indicator.style.height = '60px';
+      setTimeout(() => location.reload(), 400);
+    } else {
+      indicator.classList.remove('visible', 'ready');
+      indicator.style.height = '0px';
+    }
+  });
+})();
+
 run();
 </script>
 </body>
