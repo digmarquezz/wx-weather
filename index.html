@@ -13,163 +13,81 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 
-  <!-- WEATHER ICON SVGs as reusable symbols -->
+  <!-- WEATHER ICONS -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <defs>
-      <!-- ○ CLEAR DAY -->
       <symbol id="ico-clear" viewBox="0 0 48 48">
         <circle cx="24" cy="24" r="10" fill="#FFD700" stroke="#FFA500" stroke-width="1.5"/>
         <g stroke="#FFD700" stroke-width="2.2" stroke-linecap="round">
-          <line x1="24" y1="4" x2="24" y2="9"/>
-          <line x1="24" y1="39" x2="24" y2="44"/>
-          <line x1="4" y1="24" x2="9" y2="24"/>
-          <line x1="39" y1="24" x2="44" y2="24"/>
-          <line x1="9.4" y1="9.4" x2="12.9" y2="12.9"/>
-          <line x1="35.1" y1="35.1" x2="38.6" y2="38.6"/>
-          <line x1="38.6" y1="9.4" x2="35.1" y2="12.9"/>
-          <line x1="12.9" y1="35.1" x2="9.4" y2="38.6"/>
+          <line x1="24" y1="4" x2="24" y2="9"/><line x1="24" y1="39" x2="24" y2="44"/>
+          <line x1="4" y1="24" x2="9" y2="24"/><line x1="39" y1="24" x2="44" y2="24"/>
+          <line x1="9.4" y1="9.4" x2="12.9" y2="12.9"/><line x1="35.1" y1="35.1" x2="38.6" y2="38.6"/>
+          <line x1="38.6" y1="9.4" x2="35.1" y2="12.9"/><line x1="12.9" y1="35.1" x2="9.4" y2="38.6"/>
         </g>
       </symbol>
-
-      <!-- ◑ PARTLY CLOUDY -->
       <symbol id="ico-partly" viewBox="0 0 48 48">
         <circle cx="20" cy="22" r="9" fill="#FFD700" stroke="#FFA500" stroke-width="1.2"/>
         <g stroke="#FFD700" stroke-width="1.8" stroke-linecap="round" opacity="0.8">
-          <line x1="20" y1="6" x2="20" y2="10"/>
-          <line x1="6" y1="22" x2="10" y2="22"/>
-          <line x1="9.5" y1="11.5" x2="12.5" y2="14.5"/>
-          <line x1="30.5" y1="11.5" x2="27.5" y2="14.5"/>
+          <line x1="20" y1="6" x2="20" y2="10"/><line x1="6" y1="22" x2="10" y2="22"/>
+          <line x1="9.5" y1="11.5" x2="12.5" y2="14.5"/><line x1="30.5" y1="11.5" x2="27.5" y2="14.5"/>
         </g>
-        <path d="M18 30 Q14 30 14 25.5 Q14 21 18.5 21 Q19 17.5 22.5 17 Q26 16.5 28 19.5 Q30.5 19.5 31.5 21.5 Q34 21.5 34 24.5 Q34 28 30.5 28.5 Q30 30 28 30 Z"
-          fill="white" stroke="#d0d8e8" stroke-width="1"/>
-        <path d="M20 34 Q16 34 16 29.5 Q16 25 20.5 25 Q21 21.5 24.5 21 Q28 20.5 30 23.5 Q32.5 23.5 33.5 25.5 Q36 25.5 36 28.5 Q36 32 32.5 32.5 Q32 34 30 34 Z"
-          fill="#e8eef8" stroke="#c0cce0" stroke-width="1"/>
+        <path d="M18 30 Q14 30 14 25.5 Q14 21 18.5 21 Q19 17.5 22.5 17 Q26 16.5 28 19.5 Q30.5 19.5 31.5 21.5 Q34 21.5 34 24.5 Q34 28 30.5 28.5 Q30 30 28 30 Z" fill="white" stroke="#d0d8e8" stroke-width="1"/>
+        <path d="M20 34 Q16 34 16 29.5 Q16 25 20.5 25 Q21 21.5 24.5 21 Q28 20.5 30 23.5 Q32.5 23.5 33.5 25.5 Q36 25.5 36 28.5 Q36 32 32.5 32.5 Q32 34 30 34 Z" fill="#e8eef8" stroke="#c0cce0" stroke-width="1"/>
       </symbol>
-
-      <!-- ● OVERCAST -->
       <symbol id="ico-cloud" viewBox="0 0 48 48">
-        <path d="M14 30 Q9 30 9 24.5 Q9 19 14.5 19 Q15 14.5 19.5 13.5 Q24 12.5 26.5 16 Q29.5 15.5 31 17.5 Q34.5 17 35.5 20 Q39 20 39 24 Q39 28.5 35 29 Q34.5 31 32 31 Z"
-          fill="#d8e4f0" stroke="#b8c8e0" stroke-width="1"/>
-        <path d="M12 38 Q7 38 7 32.5 Q7 27 12.5 27 Q13 22.5 17.5 21.5 Q22 20.5 24.5 24 Q27.5 23.5 29 25.5 Q32.5 25 33.5 28 Q37 28 37 32 Q37 36.5 33 37 Q32.5 39 30 39 Z"
-          fill="white" stroke="#c8d8ec" stroke-width="1"/>
+        <path d="M14 30 Q9 30 9 24.5 Q9 19 14.5 19 Q15 14.5 19.5 13.5 Q24 12.5 26.5 16 Q29.5 15.5 31 17.5 Q34.5 17 35.5 20 Q39 20 39 24 Q39 28.5 35 29 Q34.5 31 32 31 Z" fill="#d8e4f0" stroke="#b8c8e0" stroke-width="1"/>
+        <path d="M12 38 Q7 38 7 32.5 Q7 27 12.5 27 Q13 22.5 17.5 21.5 Q22 20.5 24.5 24 Q27.5 23.5 29 25.5 Q32.5 25 33.5 28 Q37 28 37 32 Q37 36.5 33 37 Q32.5 39 30 39 Z" fill="white" stroke="#c8d8ec" stroke-width="1"/>
       </symbol>
-
-      <!-- RAIN -->
       <symbol id="ico-rain" viewBox="0 0 48 48">
-        <path d="M12 28 Q7 28 7 22.5 Q7 17 12.5 17 Q13 12.5 17.5 11.5 Q22 10.5 24.5 14 Q27.5 13.5 29 15.5 Q32.5 15 33.5 18 Q37 18 37 22 Q37 26.5 33 27 Q32.5 29 30 29 Z"
-          fill="#b8c8e0" stroke="#8aa0c0" stroke-width="1"/>
+        <path d="M12 28 Q7 28 7 22.5 Q7 17 12.5 17 Q13 12.5 17.5 11.5 Q22 10.5 24.5 14 Q27.5 13.5 29 15.5 Q32.5 15 33.5 18 Q37 18 37 22 Q37 26.5 33 27 Q32.5 29 30 29 Z" fill="#b8c8e0" stroke="#8aa0c0" stroke-width="1"/>
         <g stroke="#4a9fd4" stroke-width="2" stroke-linecap="round" opacity="0.9">
-          <line x1="16" y1="33" x2="14" y2="40"/>
-          <line x1="22" y1="33" x2="20" y2="40"/>
-          <line x1="28" y1="33" x2="26" y2="40"/>
-          <line x1="34" y1="33" x2="32" y2="40"/>
+          <line x1="16" y1="33" x2="14" y2="40"/><line x1="22" y1="33" x2="20" y2="40"/>
+          <line x1="28" y1="33" x2="26" y2="40"/><line x1="34" y1="33" x2="32" y2="40"/>
         </g>
       </symbol>
-
-      <!-- HEAVY RAIN / SHOWERS -->
       <symbol id="ico-heavyrain" viewBox="0 0 48 48">
-        <path d="M10 26 Q5 26 5 20.5 Q5 15 10.5 15 Q11 10.5 15.5 9.5 Q20 8.5 22.5 12 Q25.5 11.5 27 13.5 Q30.5 13 31.5 16 Q35 16 35 20 Q35 24.5 31 25 Q30.5 27 28 27 Z"
-          fill="#8a9cb0" stroke="#6a80a0" stroke-width="1"/>
+        <path d="M10 26 Q5 26 5 20.5 Q5 15 10.5 15 Q11 10.5 15.5 9.5 Q20 8.5 22.5 12 Q25.5 11.5 27 13.5 Q30.5 13 31.5 16 Q35 16 35 20 Q35 24.5 31 25 Q30.5 27 28 27 Z" fill="#8a9cb0" stroke="#6a80a0" stroke-width="1"/>
         <g stroke="#2a7fd4" stroke-width="2.2" stroke-linecap="round">
-          <line x1="13" y1="31" x2="10" y2="40"/>
-          <line x1="20" y1="31" x2="17" y2="40"/>
-          <line x1="27" y1="31" x2="24" y2="40"/>
-          <line x1="34" y1="31" x2="31" y2="40"/>
+          <line x1="13" y1="31" x2="10" y2="40"/><line x1="20" y1="31" x2="17" y2="40"/>
+          <line x1="27" y1="31" x2="24" y2="40"/><line x1="34" y1="31" x2="31" y2="40"/>
         </g>
       </symbol>
-
-      <!-- DRIZZLE -->
       <symbol id="ico-drizzle" viewBox="0 0 48 48">
-        <path d="M13 27 Q8 27 8 21.5 Q8 16 13.5 16 Q14 11.5 18.5 10.5 Q23 9.5 25.5 13 Q28.5 12.5 30 14.5 Q33.5 14 34.5 17 Q38 17 38 21 Q38 25.5 34 26 Q33.5 28 31 28 Z"
-          fill="#c8d8ec" stroke="#a0b8d4" stroke-width="1"/>
+        <path d="M13 27 Q8 27 8 21.5 Q8 16 13.5 16 Q14 11.5 18.5 10.5 Q23 9.5 25.5 13 Q28.5 12.5 30 14.5 Q33.5 14 34.5 17 Q38 17 38 21 Q38 25.5 34 26 Q33.5 28 31 28 Z" fill="#c8d8ec" stroke="#a0b8d4" stroke-width="1"/>
         <g stroke="#6ab0e0" stroke-width="1.5" stroke-linecap="round" opacity="0.8">
-          <line x1="16" y1="33" x2="15" y2="37"/>
-          <line x1="22" y1="33" x2="21" y2="37"/>
-          <line x1="28" y1="33" x2="27" y2="37"/>
-          <line x1="34" y1="33" x2="33" y2="37"/>
-          <line x1="19" y1="38" x2="18" y2="42"/>
-          <line x1="25" y1="38" x2="24" y2="42"/>
-          <line x1="31" y1="38" x2="30" y2="42"/>
+          <line x1="16" y1="33" x2="15" y2="37"/><line x1="22" y1="33" x2="21" y2="37"/>
+          <line x1="28" y1="33" x2="27" y2="37"/><line x1="34" y1="33" x2="33" y2="37"/>
         </g>
       </symbol>
-
-      <!-- SNOW -->
       <symbol id="ico-snow" viewBox="0 0 48 48">
-        <path d="M13 26 Q8 26 8 20.5 Q8 15 13.5 15 Q14 10.5 18.5 9.5 Q23 8.5 25.5 12 Q28.5 11.5 30 13.5 Q33.5 13 34.5 16 Q38 16 38 20 Q38 24.5 34 25 Q33.5 27 31 27 Z"
-          fill="#ddeeff" stroke="#aaccee" stroke-width="1"/>
-        <g fill="#88bbee" stroke="none">
-          <text x="14" y="40" font-size="8" text-anchor="middle" font-family="serif">❄</text>
-          <text x="24" y="43" font-size="8" text-anchor="middle" font-family="serif">❄</text>
-          <text x="34" y="40" font-size="8" text-anchor="middle" font-family="serif">❄</text>
-        </g>
-        <!-- snowflakes as lines -->
+        <path d="M13 26 Q8 26 8 20.5 Q8 15 13.5 15 Q14 10.5 18.5 9.5 Q23 8.5 25.5 12 Q28.5 11.5 30 13.5 Q33.5 13 34.5 16 Q38 16 38 20 Q38 24.5 34 25 Q33.5 27 31 27 Z" fill="#ddeeff" stroke="#aaccee" stroke-width="1"/>
         <g stroke="#88aadd" stroke-width="1.8" stroke-linecap="round">
-          <line x1="15" y1="33" x2="15" y2="42"/>
-          <line x1="11" y1="37.5" x2="19" y2="37.5"/>
-          <line x1="12.2" y1="34.2" x2="17.8" y2="40.8"/>
-          <line x1="17.8" y1="34.2" x2="12.2" y2="40.8"/>
-
-          <line x1="24" y1="33" x2="24" y2="42"/>
-          <line x1="20" y1="37.5" x2="28" y2="37.5"/>
-          <line x1="21.2" y1="34.2" x2="26.8" y2="40.8"/>
-          <line x1="26.8" y1="34.2" x2="21.2" y2="40.8"/>
-
-          <line x1="33" y1="33" x2="33" y2="42"/>
-          <line x1="29" y1="37.5" x2="37" y2="37.5"/>
-          <line x1="30.2" y1="34.2" x2="35.8" y2="40.8"/>
-          <line x1="35.8" y1="34.2" x2="30.2" y2="40.8"/>
+          <line x1="15" y1="33" x2="15" y2="42"/><line x1="11" y1="37.5" x2="19" y2="37.5"/>
+          <line x1="12.2" y1="34.2" x2="17.8" y2="40.8"/><line x1="17.8" y1="34.2" x2="12.2" y2="40.8"/>
+          <line x1="24" y1="33" x2="24" y2="42"/><line x1="20" y1="37.5" x2="28" y2="37.5"/>
+          <line x1="21.2" y1="34.2" x2="26.8" y2="40.8"/><line x1="26.8" y1="34.2" x2="21.2" y2="40.8"/>
+          <line x1="33" y1="33" x2="33" y2="42"/><line x1="29" y1="37.5" x2="37" y2="37.5"/>
+          <line x1="30.2" y1="34.2" x2="35.8" y2="40.8"/><line x1="35.8" y1="34.2" x2="30.2" y2="40.8"/>
         </g>
       </symbol>
-
-      <!-- STORM / THUNDER -->
       <symbol id="ico-storm" viewBox="0 0 48 48">
-        <path d="M10 26 Q5 26 5 20 Q5 14 11 14 Q12 9 17 8 Q22 7 25 11 Q28 10.5 30 13 Q33.5 12.5 35 16 Q39 16 39 21 Q39 25.5 35 26 Q34 28 31 28 Z"
-          fill="#6a7a90" stroke="#4a5a70" stroke-width="1"/>
-        <polygon points="23,29 18,38 22,38 19,47 30,34 25,34 29,29" 
-          fill="#FFE010" stroke="#FFA500" stroke-width="0.8" stroke-linejoin="round"/>
+        <path d="M10 26 Q5 26 5 20 Q5 14 11 14 Q12 9 17 8 Q22 7 25 11 Q28 10.5 30 13 Q33.5 12.5 35 16 Q39 16 39 21 Q39 25.5 35 26 Q34 28 31 28 Z" fill="#6a7a90" stroke="#4a5a70" stroke-width="1"/>
+        <polygon points="23,29 18,38 22,38 19,47 30,34 25,34 29,29" fill="#FFE010" stroke="#FFA500" stroke-width="0.8" stroke-linejoin="round"/>
       </symbol>
-
-      <!-- FOG -->
       <symbol id="ico-fog" viewBox="0 0 48 48">
         <g stroke="#a0b0c8" stroke-width="2.5" stroke-linecap="round" opacity="0.7">
-          <line x1="8" y1="18" x2="40" y2="18"/>
-          <line x1="11" y1="24" x2="37" y2="24"/>
-          <line x1="8" y1="30" x2="40" y2="30"/>
-          <line x1="12" y1="36" x2="36" y2="36"/>
+          <line x1="8" y1="18" x2="40" y2="18"/><line x1="11" y1="24" x2="37" y2="24"/>
+          <line x1="8" y1="30" x2="40" y2="30"/><line x1="12" y1="36" x2="36" y2="36"/>
         </g>
         <g stroke="#c8d8ec" stroke-width="2" stroke-linecap="round" opacity="0.5">
-          <line x1="8" y1="21" x2="40" y2="21"/>
-          <line x1="11" y1="27" x2="37" y2="27"/>
+          <line x1="8" y1="21" x2="40" y2="21"/><line x1="11" y1="27" x2="37" y2="27"/>
           <line x1="8" y1="33" x2="40" y2="33"/>
         </g>
       </symbol>
-
-      <!-- NIGHT CLEAR -->
       <symbol id="ico-night" viewBox="0 0 48 48">
-        <path d="M28 10 Q20 14 20 24 Q20 34 28 38 Q18 38 13 31 Q8 24 13 17 Q18 10 28 10Z"
-          fill="#7090d0" stroke="#5070b0" stroke-width="1"/>
+        <path d="M28 10 Q20 14 20 24 Q20 34 28 38 Q18 38 13 31 Q8 24 13 17 Q18 10 28 10Z" fill="#7090d0" stroke="#5070b0" stroke-width="1"/>
         <circle cx="34" cy="12" r="2" fill="#ffe080"/>
         <circle cx="38" cy="22" r="1.5" fill="#ffe080" opacity="0.7"/>
-        <circle cx="30" cy="8" r="1" fill="#ffe080" opacity="0.6"/>
-        <circle cx="40" cy="16" r="1" fill="#ffe080" opacity="0.5"/>
-      </symbol>
-
-      <!-- SLEET -->
-      <symbol id="ico-sleet" viewBox="0 0 48 48">
-        <path d="M12 26 Q7 26 7 20.5 Q7 15 12.5 15 Q13 10.5 17.5 9.5 Q22 8.5 24.5 12 Q27.5 11.5 29 13.5 Q32.5 13 33.5 16 Q37 16 37 20 Q37 24.5 33 25 Q32.5 27 30 27 Z"
-          fill="#b0c0d8" stroke="#8090b0" stroke-width="1"/>
-        <g stroke="#4a9fd4" stroke-width="2" stroke-linecap="round">
-          <line x1="15" y1="31" x2="13" y2="37"/>
-          <line x1="28" y1="31" x2="26" y2="37"/>
-        </g>
-        <g stroke="#88aadd" stroke-width="1.8" stroke-linecap="round">
-          <line x1="22" y1="31" x2="22" y2="39"/>
-          <line x1="18" y1="35" x2="26" y2="35"/>
-          <line x1="19.2" y1="32.2" x2="24.8" y2="37.8"/>
-          <line x1="24.8" y1="32.2" x2="19.2" y2="37.8"/>
-          <line x1="33" y1="32" x2="33" y2="40"/>
-          <line x1="29" y1="36" x2="37" y2="36"/>
-        </g>
       </symbol>
     </defs>
   </svg>
@@ -178,12 +96,13 @@
     :root {
       --black:#000; --white:#fff;
       --g1:#f7f7f7; --g2:#e8e8e8; --g3:#bbb; --g4:#777;
+      --blue:#2a7fd4; --blue-soft:#e6f0fa;
       --safe-top:env(safe-area-inset-top,0px);
       --safe-bottom:env(safe-area-inset-bottom,0px);
     }
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;background:#000;overscroll-behavior:none;}
-    body{font-family:'Space Mono',monospace;background:var(--white);color:var(--black);min-height:100dvh;overflow-x:hidden;}
+    body{font-family:'Space Mono',monospace;background:#fff;color:#000;min-height:100dvh;overflow-x:hidden;}
 
     /* LOADER */
     #loader{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:999;transition:opacity 0.5s;}
@@ -193,11 +112,9 @@
     .l-fill{height:1px;background:#000;width:0%;transition:width 0.6s ease;}
     .l-msg{font-size:8px;letter-spacing:0.18em;color:var(--g3);}
 
-    /* APP */
     #app{padding-top:calc(var(--safe-top) + 20px);padding-bottom:calc(var(--safe-bottom) + 32px);padding-left:22px;padding-right:22px;max-width:430px;margin:0 auto;opacity:0;transform:translateY(10px);transition:opacity 0.5s,transform 0.5s;}
     #app.visible{opacity:1;transform:translateY(0);}
 
-    /* HEADER */
     .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
     .logo{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:8px;opacity:0.4;}
     .gps-pill{display:flex;align-items:center;gap:5px;font-size:8px;font-weight:700;letter-spacing:0.12em;color:var(--g4);padding:5px 10px;border:1px solid var(--g2);border-radius:2px;cursor:pointer;}
@@ -207,48 +124,159 @@
     .city{font-size:11px;font-weight:700;letter-spacing:0.2em;margin-bottom:1px;}
     .updated{font-size:7px;letter-spacing:0.12em;color:var(--g3);}
 
-    /* MAIN WEATHER HERO */
-    .hero{display:flex;align-items:flex-end;gap:10px;margin:10px 0 4px;}
-    .hero-icon{width:80px;height:80px;flex-shrink:0;}
-    .hero-right{flex:1;}
-    .temp-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,22vw,120px);line-height:0.85;letter-spacing:-4px;}
-    .temp-unit{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;margin-bottom:6px;color:var(--g2);}
-    .cond{font-size:10px;font-weight:700;letter-spacing:0.16em;margin-top:4px;}
-    .hilo{font-size:9px;letter-spacing:0.08em;color:var(--g3);margin-top:2px;}
+    /* ── ALERT BANNER ─────────────────────────────── */
+    .alert-banner{
+      display:none;
+      border:1px solid #000;border-radius:3px;
+      padding:12px 14px;margin:14px 0;
+      background:#fff8e0;border-color:#d4a017;
+      position:relative;
+    }
+    .alert-banner.severe{background:#fbe6e6;border-color:#c0392b;}
+    .alert-banner.show{display:block;}
+    .alert-title{
+      font-size:9px;font-weight:700;letter-spacing:0.18em;
+      color:#000;margin-bottom:5px;
+      display:flex;align-items:center;gap:6px;
+    }
+    .alert-icon{font-size:14px;}
+    .alert-msg{font-size:10px;line-height:1.55;color:#000;letter-spacing:0.02em;}
 
-    /* DIVIDER */
-    .div{width:100%;height:1px;background:var(--g2);margin:16px 0;}
+    /* ── HERO BIG TEMP ────────────────────────────── */
+    .hero{margin:14px 0 8px;position:relative;}
 
-    /* SECTION LABEL */
+    .hero-top{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin-bottom:10px;
+    }
+    .hero-icon{width:64px;height:64px;flex-shrink:0;}
+
+    .vs-yesterday{
+      display:inline-flex;align-items:center;gap:4px;
+      font-family:'Space Mono',monospace;
+      font-size:8px;font-weight:700;letter-spacing:0.1em;
+      padding:5px 9px;border:1px solid var(--g2);border-radius:2px;
+      color:var(--g4);background:#fff;
+    }
+    .vs-yesterday .arrow{font-size:10px;}
+    .vs-yesterday.warmer{color:#c0392b;border-color:#c0392b;}
+    .vs-yesterday.cooler{color:#2a7fd4;border-color:#2a7fd4;}
+
+    .temp-row{display:flex;align-items:flex-start;gap:0;line-height:0.82;}
+    .temp-mega{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(150px, 42vw, 200px);
+      letter-spacing:-8px;
+      line-height:0.82;
+    }
+    .temp-mega-unit{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:54px;line-height:1;
+      margin-top:14px;color:var(--g2);
+    }
+
+    .cond-row{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-top:6px;flex-wrap:wrap;gap:6px;
+    }
+    .cond{font-size:11px;font-weight:700;letter-spacing:0.18em;}
+    .hilo{font-size:10px;letter-spacing:0.08em;color:var(--g3);}
+
+    .feels-warning{
+      display:none;
+      margin-top:8px;padding:8px 12px;
+      background:#fbe6e6;border-left:2px solid #c0392b;
+      font-size:9px;font-weight:700;letter-spacing:0.1em;
+      color:#000;
+    }
+    .feels-warning.show{display:block;}
+
+    .div{width:100%;height:1px;background:var(--g2);margin:18px 0;}
+
     .slbl{font-size:7px;font-weight:700;letter-spacing:0.2em;color:var(--g3);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
     .slbl::after{content:'';flex:1;height:1px;background:var(--g2);}
 
-    /* STRIP */
     .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--g2);border:1px solid var(--g2);border-radius:3px;overflow:hidden;margin-bottom:16px;}
     .strip-item{background:#fff;padding:11px 8px;text-align:center;}
     .sv{font-size:16px;font-weight:700;}
     .sl{font-size:6px;font-weight:700;letter-spacing:0.12em;color:var(--g3);margin-top:3px;}
 
-    /* TABS */
+    /* ── RAIN PROBABILITY BARS ────────────────────── */
+    .rain-section{margin-bottom:16px;}
+    .rain-header{
+      display:flex;align-items:baseline;justify-content:space-between;
+      margin-bottom:14px;
+    }
+    .rain-title{font-size:11px;font-weight:700;letter-spacing:0.1em;}
+    .rain-subtitle{
+      font-family:'Space Mono',monospace;
+      font-size:8px;letter-spacing:0.1em;color:var(--g4);
+    }
+    .rain-bars{
+      display:flex;align-items:flex-end;gap:4px;
+      height:90px;padding:0 0 24px;
+      border-bottom:1px solid var(--g2);
+      position:relative;
+    }
+    .rain-bar{
+      flex:1;
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      min-width:0;
+    }
+    .rain-bar-track{
+      width:100%;height:60px;
+      display:flex;align-items:flex-end;
+      position:relative;
+    }
+    .rain-bar-fill{
+      width:100%;
+      background:linear-gradient(to top, #2a7fd4 0%, #6ab0e0 100%);
+      border-radius:2px 2px 0 0;
+      min-height:2px;
+      transition:height 0.5s ease;
+      position:relative;
+    }
+    .rain-bar-fill.dry{background:var(--g2);}
+    .rain-bar-fill.low{background:linear-gradient(to top, #b8d8ec 0%, #d8e4f0 100%);}
+    .rain-bar-fill.med{background:linear-gradient(to top, #6ab0e0 0%, #a8d0e8 100%);}
+    .rain-bar-fill.high{background:linear-gradient(to top, #2a7fd4 0%, #6ab0e0 100%);}
+    .rain-bar-fill.extreme{background:linear-gradient(to top, #0a4f9d 0%, #2a7fd4 100%);}
+
+    .rain-bar-pct{
+      position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+      font-family:'Space Mono',monospace;
+      font-size:7px;font-weight:700;letter-spacing:0.04em;
+      color:#000;white-space:nowrap;
+    }
+    .rain-bar-time{
+      position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+      font-family:'Space Mono',monospace;
+      font-size:6px;font-weight:700;letter-spacing:0.06em;
+      color:var(--g4);white-space:nowrap;
+    }
+    .rain-summary{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-top:12px;font-size:9px;color:var(--g4);
+      letter-spacing:0.06em;
+    }
+    .rain-summary strong{color:#000;font-weight:700;}
+
+    /* ── TABS ─────────────────────────────────────── */
     .tabs{display:flex;border:1px solid #000;border-radius:3px;overflow:hidden;width:fit-content;margin-bottom:14px;}
     .tab{padding:7px 14px;font-family:'Space Mono',monospace;font-size:7px;font-weight:700;letter-spacing:0.12em;cursor:pointer;border:none;background:#fff;color:var(--g3);transition:all 0.15s;}
     .tab.on{background:#000;color:#fff;}
 
-    /* HOURLY */
     .hscroll{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
     .hscroll::-webkit-scrollbar{display:none;}
     .hi{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:11px 9px;border:1px solid var(--g2);border-radius:3px;min-width:58px;}
     .hi.now{background:#000;border-color:#000;}
     .hi.now .ht,.hi.now .hv,.hi.now .hp{color:#fff;}
-    .ht{font-size:7px;font-weight:700;letter-spacing:0.08em;color:var(--black);}
+    .ht{font-size:7px;font-weight:700;letter-spacing:0.08em;color:#000;}
     .hi-ico{width:28px;height:28px;}
-    .hv{font-size:12px;font-weight:700;color:var(--black);}
-    .hp{font-size:6px;opacity:0.55;letter-spacing:0.06em;color:var(--black);}
-
-    /* "now" icon needs white tint overlay for dark bg */
+    .hv{font-size:12px;font-weight:700;color:#000;}
+    .hp{font-size:6px;opacity:0.55;letter-spacing:0.06em;color:#000;}
     .hi.now .hi-ico{filter:brightness(0) invert(1);}
 
-    /* WEEKLY */
     .wr{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--g1);}
     .wr:last-child{border-bottom:none;}
     .wd{font-size:8px;font-weight:700;letter-spacing:0.1em;width:28px;}
@@ -260,7 +288,6 @@
     .btf{height:100%;background:#000;border-radius:1px;}
     .wpp{font-size:7px;color:var(--g3);width:26px;text-align:right;}
 
-    /* STATS */
     .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--g2);border:1px solid var(--g2);border-radius:3px;overflow:hidden;margin-bottom:16px;}
     .sbox{background:#fff;padding:13px 13px 11px;}
     .sbl{font-size:6px;font-weight:700;letter-spacing:0.16em;color:var(--g3);}
@@ -270,7 +297,34 @@
     .uv-fill{height:100%;border-radius:2px;background:#000;}
     .uv-scale{display:flex;justify-content:space-between;font-size:6px;color:var(--g3);}
 
-    /* SUN */
+    /* ── POLLEN SECTION ────────────────────────────── */
+    .pollen-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+      background:var(--g2);border:1px solid var(--g2);
+      border-radius:3px;overflow:hidden;margin-bottom:16px;
+    }
+    .pollen-cell{background:#fff;padding:12px 10px;text-align:center;}
+    .pollen-name{
+      font-family:'Space Mono',monospace;
+      font-size:7px;font-weight:700;letter-spacing:0.12em;
+      color:var(--g3);margin-bottom:6px;
+    }
+    .pollen-dots{display:flex;gap:3px;justify-content:center;margin:8px 0;}
+    .pollen-dot{
+      width:6px;height:6px;border-radius:50%;
+      background:var(--g2);
+    }
+    .pollen-dot.on{background:#000;}
+    .pollen-dot.severe{background:#c0392b;}
+    .pollen-level{
+      font-size:9px;font-weight:700;
+    }
+    .pollen-val{
+      font-family:'Space Mono',monospace;
+      font-size:7px;letter-spacing:0.06em;color:var(--g4);margin-top:2px;
+    }
+
+    /* ── SUN ─────────────────────────────────────── */
     .sun-wrap{margin-bottom:16px;}
     .sun-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-bottom:6px;}
     .sun-side{min-width:70px;}
@@ -281,14 +335,12 @@
     .arc-wrap{flex:1;}
     .daylight{text-align:center;font-size:7px;letter-spacing:0.14em;color:var(--g3);}
 
-    /* GOLDEN */
     .gold-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--g2);border:1px solid var(--g2);border-radius:3px;overflow:hidden;margin-bottom:16px;}
     .gold-item{background:#fff;padding:13px;}
     .gll{font-size:6px;font-weight:700;letter-spacing:0.16em;color:var(--g3);margin-bottom:4px;}
     .glt{font-size:18px;font-weight:700;}
     .gld{font-size:7px;color:var(--g3);margin-top:2px;}
 
-    /* MOON */
     .moon-wrap{display:flex;align-items:center;gap:14px;border:1px solid var(--g2);border-radius:3px;padding:14px;margin-bottom:16px;}
     .moon-sym{font-size:42px;line-height:1;flex-shrink:0;}
     .moon-name{font-size:11px;font-weight:700;letter-spacing:0.08em;margin-bottom:5px;}
@@ -298,30 +350,25 @@
     .moon-pct-val{font-size:8px;font-weight:700;}
     .moon-txt{font-size:8px;color:var(--g4);line-height:1.6;}
 
-    /* CURIOSITY */
     .cur-card{border:1px solid #000;border-radius:3px;padding:16px;margin-bottom:16px;position:relative;overflow:hidden;}
     .cur-tag{font-size:7px;font-weight:700;letter-spacing:0.18em;color:var(--g3);margin-bottom:8px;}
     .cur-txt{font-size:10px;line-height:1.75;font-style:italic;position:relative;z-index:1;}
     .cur-bg{position:absolute;right:10px;bottom:4px;font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--g1);line-height:1;pointer-events:none;}
 
-    /* AQI */
     .aqi-full{grid-column:1/-1;}
     .aqi-track{height:4px;background:var(--g2);border-radius:2px;overflow:hidden;margin:8px 0 4px;}
     .aqi-fill{height:100%;border-radius:2px;background:#000;}
     .aqi-lbls{display:flex;justify-content:space-between;font-size:6px;color:var(--g3);}
 
-    /* NOTIF */
     #notif-banner{display:none;margin-bottom:16px;border:1px solid #000;border-radius:3px;padding:14px;cursor:pointer;}
     .nb-title{font-size:9px;font-weight:700;letter-spacing:0.14em;margin-bottom:4px;}
     .nb-sub{font-size:8px;color:var(--g4);line-height:1.5;}
     .nb-btn{display:inline-block;margin-top:10px;padding:7px 16px;background:#000;color:#fff;font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.12em;border-radius:2px;}
 
-    /* FOOTER */
     .footer{text-align:center;padding-top:10px;border-top:1px solid var(--g1);}
     .footer-txt{font-size:7px;color:var(--g3);letter-spacing:0.1em;line-height:2;}
     .footer-txt a{color:var(--g3);text-decoration:none;border-bottom:1px solid var(--g2);}
 
-    /* ANIMS */
     .fu{opacity:0;transform:translateY(12px);animation:fu 0.5s ease forwards;}
     @keyframes fu{to{opacity:1;transform:translateY(0);}}
     .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.20s}
@@ -351,16 +398,34 @@
     <div class="updated" id="updated">—</div>
   </div>
 
-  <!-- HERO: big icon + temperature -->
+  <!-- ALERT BANNER -->
+  <div class="alert-banner fu d1" id="alert-banner">
+    <div class="alert-title">
+      <span class="alert-icon">⚠</span>
+      <span id="alert-title-text">AVISO METEOROLÓGICO</span>
+    </div>
+    <div class="alert-msg" id="alert-msg">—</div>
+  </div>
+
+  <!-- HERO: MEGA TEMP -->
   <div class="hero fu d2">
-    <svg class="hero-icon" id="hero-icon"><use href="#ico-clear"/></svg>
-    <div class="hero-right">
-      <div>
-        <span class="temp-big" id="temp">—</span>
-        <span class="temp-unit">°C</span>
+    <div class="hero-top">
+      <svg class="hero-icon" id="hero-icon"><use href="#ico-clear"/></svg>
+      <div class="vs-yesterday" id="vs-yesterday" style="display:none;">
+        <span class="arrow" id="vs-arrow">→</span>
+        <span id="vs-text">— vs ayer</span>
       </div>
-      <div class="cond" id="cond">—</div>
-      <div class="hilo" id="hilo">—</div>
+    </div>
+    <div class="temp-row">
+      <span class="temp-mega" id="temp">—</span>
+      <span class="temp-mega-unit">°C</span>
+    </div>
+    <div class="cond-row">
+      <span class="cond" id="cond">—</span>
+      <span class="hilo" id="hilo">—</span>
+    </div>
+    <div class="feels-warning" id="feels-warning">
+      <span id="feels-warning-text">—</span>
     </div>
   </div>
 
@@ -381,17 +446,31 @@
     <div class="strip-item"><div class="sv" id="s-prec">—</div><div class="sl">PRECIP</div></div>
   </div>
 
-  <div class="tabs fu d3">
+  <!-- ── PROBABILIDAD DE LLUVIA ────────────────── -->
+  <div class="slbl fu d3">PROBABILIDAD DE LLUVIA</div>
+  <div class="rain-section fu d3">
+    <div class="rain-header">
+      <div class="rain-title" id="rain-title">PRÓXIMAS 12 HORAS</div>
+      <div class="rain-subtitle" id="rain-subtitle">—</div>
+    </div>
+    <div class="rain-bars" id="rain-bars"></div>
+    <div class="rain-summary">
+      <span>MAX <strong id="rain-max">—%</strong> · MEDIA <strong id="rain-avg">—%</strong></span>
+      <span id="rain-verdict">—</span>
+    </div>
+  </div>
+
+  <div class="tabs fu d4">
     <button class="tab on" id="tab-h" onclick="swTab('h')">POR HORA</button>
     <button class="tab" id="tab-w" onclick="swTab('w')">7 DÍAS</button>
   </div>
-  <div id="ph" class="fu d3"><div class="hscroll" id="hourly"></div></div>
+  <div id="ph" class="fu d4"><div class="hscroll" id="hourly"></div></div>
   <div id="pw" style="display:none"><div id="weekly"></div></div>
 
-  <div class="div fu d4"></div>
+  <div class="div fu d5"></div>
 
-  <div class="slbl fu d4">CONDICIONES</div>
-  <div class="sgrid fu d4">
+  <div class="slbl fu d5">CONDICIONES</div>
+  <div class="sgrid fu d5">
     <div class="sbox">
       <div class="sbl">ÍNDICE UV</div>
       <div class="sbv" id="uv-val">—</div>
@@ -426,10 +505,33 @@
     </div>
   </div>
 
-  <div class="div fu d5"></div>
+  <!-- ── POLEN ────────────────────────────────── -->
+  <div class="slbl fu d6">POLEN EN EL AIRE</div>
+  <div class="pollen-grid fu d6">
+    <div class="pollen-cell">
+      <div class="pollen-name">GRAMÍNEAS</div>
+      <div class="pollen-dots" id="pollen-grass"></div>
+      <div class="pollen-level" id="pollen-grass-lvl">—</div>
+      <div class="pollen-val" id="pollen-grass-val">— gr/m³</div>
+    </div>
+    <div class="pollen-cell">
+      <div class="pollen-name">OLIVO</div>
+      <div class="pollen-dots" id="pollen-olive"></div>
+      <div class="pollen-level" id="pollen-olive-lvl">—</div>
+      <div class="pollen-val" id="pollen-olive-val">— gr/m³</div>
+    </div>
+    <div class="pollen-cell">
+      <div class="pollen-name">ABEDUL</div>
+      <div class="pollen-dots" id="pollen-birch"></div>
+      <div class="pollen-level" id="pollen-birch-lvl">—</div>
+      <div class="pollen-val" id="pollen-birch-val">— gr/m³</div>
+    </div>
+  </div>
 
-  <div class="slbl fu d5">ASTRO SOLAR</div>
-  <div class="sun-wrap fu d5">
+  <div class="div fu d6"></div>
+
+  <div class="slbl fu d7">ASTRO SOLAR</div>
+  <div class="sun-wrap fu d7">
     <div class="sun-row">
       <div class="sun-side">
         <div class="sunlbl">AMANECER</div>
@@ -443,9 +545,6 @@
           <path id="arc-prog" d="M12 66 Q100 -8 188 66" stroke="#FFB800" stroke-width="2" fill="none" stroke-dasharray="230" stroke-dashoffset="230"/>
           <circle id="sun-dot" cx="12" cy="66" r="5" fill="#FFD700"/>
           <circle id="sun-dot2" cx="12" cy="66" r="2.5" fill="#fff" opacity="0.6"/>
-          <line x1="12" y1="66" x2="12" y2="58" stroke="#ddd" stroke-width="1"/>
-          <line x1="188" y1="66" x2="188" y2="58" stroke="#ddd" stroke-width="1"/>
-          <line x1="100" y1="66" x2="100" y2="62" stroke="#ddd" stroke-width="1"/>
         </svg>
       </div>
       <div class="sun-side right">
@@ -457,10 +556,10 @@
     <div class="daylight" id="daylight">—</div>
   </div>
 
-  <div class="div fu d5"></div>
+  <div class="div fu d7"></div>
 
-  <div class="slbl fu d5">HORA DORADA · FOTOGRAFÍA</div>
-  <div class="gold-grid fu d5">
+  <div class="slbl fu d7">HORA DORADA · FOTOGRAFÍA</div>
+  <div class="gold-grid fu d7">
     <div class="gold-item">
       <div class="gll">↑ MAÑANA</div>
       <div class="glt" id="gam">—</div>
@@ -473,8 +572,8 @@
     </div>
   </div>
 
-  <div class="slbl fu d6">FASE LUNAR</div>
-  <div class="moon-wrap fu d6">
+  <div class="slbl fu d8">FASE LUNAR</div>
+  <div class="moon-wrap fu d8">
     <div class="moon-sym" id="moon-sym">🌑</div>
     <div style="flex:1;min-width:0;">
       <div class="moon-name" id="moon-name">—</div>
@@ -486,17 +585,17 @@
     </div>
   </div>
 
-  <div class="div fu d6"></div>
+  <div class="div fu d8"></div>
 
-  <div class="slbl fu d7">DATO DEL DÍA</div>
-  <div class="cur-card fu d7">
+  <div class="slbl fu d8">DATO DEL DÍA</div>
+  <div class="cur-card fu d8">
     <div class="cur-tag">// METEOROLOGÍA</div>
     <div class="cur-txt" id="cur-txt">—</div>
     <div class="cur-bg" id="cur-bg">—</div>
   </div>
 
-  <div class="slbl fu d7">CALIDAD DEL AIRE</div>
-  <div class="sgrid fu d7">
+  <div class="slbl fu d9">CALIDAD DEL AIRE</div>
+  <div class="sgrid fu d9">
     <div class="sbox aqi-full">
       <div class="sbl">ÍNDICE AQI EUROPEO</div>
       <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px;">
@@ -514,6 +613,7 @@
     <div class="footer-txt">
       METEOROLOGÍA · <a href="https://open-meteo.com" target="_blank">OPEN-METEO.COM</a><br/>
       CALIDAD DEL AIRE · <a href="https://open-meteo.com" target="_blank">OPEN-METEO AIR QUALITY API</a><br/>
+      POLEN · <a href="https://open-meteo.com" target="_blank">OPEN-METEO POLLEN API</a><br/>
       GEOCODIFICACIÓN · <a href="https://nominatim.openstreetmap.org" target="_blank">NOMINATIM / OSM</a><br/>
       TODOS LOS SERVICIOS SON GRATUITOS Y DE CÓDIGO ABIERTO<br/>
       WX · <span id="yr"></span>
@@ -531,7 +631,6 @@ function fmtTime(iso){return new Date(iso).toLocaleTimeString('es-ES',{hour:'2-d
 function minsFromMidnight(s){const[h,m]=s.split(':').map(Number);return h*60+m;}
 function addMins(s,n){let m=minsFromMidnight(s)+n;m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
 
-// ── WMO ICON MAPPING ─────────────────────────────────────────────────────────
 function wmoIcon(code, isNight) {
   if(code===0) return isNight ? 'ico-night' : 'ico-clear';
   if(code<=2)  return 'ico-partly';
@@ -564,11 +663,94 @@ function cloudLbl(c){if(c<10)return'DESPEJADO';if(c<30)return'POCO NUBOSO';if(c<
 function dewLbl(d,t){const x=t-d;if(x<3)return'CONDENSACIÓN INMINENTE';if(x<8)return'AMBIENTE HÚMEDO';if(x<15)return'CONFORT NORMAL';return'AMBIENTE SECO';}
 function aqiLbl(a){if(a<=20)return'BUENA';if(a<=40)return'RAZONABLE';if(a<=60)return'MODERADA';if(a<=80)return'POBRE';if(a<=100)return'MUY POBRE';return'EXTREMADAMENTE POBRE';}
 
-function moonPhase(date){
-  const days=(date-new Date('2000-01-06T00:00:00Z'))/86400000;
-  const phase=((days%29.53058867)+29.53058867)%29.53058867;
-  const pct=Math.round((phase/29.53058867)*100);
-  let sym,name,txt;
+// ── POLEN levels (grains/m³) ──
+function pollenInfo(v){
+  v = Number(v) || 0;
+  if(v < 1)   return {lvl:'NULO',    dots:0, severe:false, color:'g3'};
+  if(v < 20)  return {lvl:'BAJO',    dots:1, severe:false};
+  if(v < 50)  return {lvl:'MODERADO',dots:2, severe:false};
+  if(v < 100) return {lvl:'ALTO',    dots:3, severe:true};
+  return              {lvl:'MUY ALTO',dots:4, severe:true};
+}
+
+function renderPollenDots(elId, info){
+  const el = $(elId);
+  el.innerHTML = '';
+  for(let i = 0; i < 4; i++){
+    const dot = document.createElement('div');
+    dot.className = 'pollen-dot' + (i < info.dots ? ' on' : '') + (info.severe && i < info.dots ? ' severe' : '');
+    el.appendChild(dot);
+  }
+}
+
+// ── ALERTS based on conditions ──
+function generateAlert(c, d, h) {
+  // Severe storm
+  if([95,96,99].includes(c.weather_code)) return {
+    severe:true, title:'AVISO DE TORMENTA',
+    msg:'Tormenta activa. Evita zonas abiertas, árboles y cuerpos de agua. Riesgo de rayos.'
+  };
+  // Extreme heat
+  if(c.temperature_2m >= 38) return {
+    severe:true, title:'AVISO DE CALOR EXTREMO',
+    msg:`Temperatura de ${f0(c.temperature_2m)}°C. Hidrátate con frecuencia, evita el sol entre 12-17h y vigila a personas vulnerables.`
+  };
+  if(c.temperature_2m >= 35) return {
+    severe:false, title:'AVISO POR CALOR',
+    msg:`Temperatura elevada (${f0(c.temperature_2m)}°C). Hidratación y protección solar recomendadas.`
+  };
+  // Extreme cold
+  if(c.temperature_2m <= -5) return {
+    severe:true, title:'AVISO POR FRÍO INTENSO',
+    msg:`Temperatura de ${f0(c.temperature_2m)}°C. Riesgo de hipotermia y heladas. Abrigo extremo.`
+  };
+  // Strong wind
+  if(c.wind_gusts_10m >= 90) return {
+    severe:true, title:'AVISO POR VIENTO FUERTE',
+    msg:`Ráfagas de hasta ${f0(c.wind_gusts_10m)} km/h. Evita exteriores, asegura objetos sueltos.`
+  };
+  if(c.wind_gusts_10m >= 70) return {
+    severe:false, title:'AVISO POR VIENTO',
+    msg:`Ráfagas de ${f0(c.wind_gusts_10m)} km/h. Conduce con precaución.`
+  };
+  // Heavy rain incoming next 6h
+  if(h && h.precipitation_probability){
+    const next6 = h.precipitation_probability.slice(0, 6);
+    const max6 = Math.max(...next6);
+    if(max6 >= 80) return {
+      severe:false, title:'LLUVIA INMINENTE',
+      msg:`Probabilidad de lluvia del ${max6}% en las próximas 6 horas. Lleva paraguas.`
+    };
+  }
+  // UV extreme
+  if(c.uv_index >= 11) return {
+    severe:false, title:'AVISO POR ÍNDICE UV',
+    msg:'Radiación UV extrema. Protector solar 50+, gafas y sombra.'
+  };
+  return null;
+}
+
+// ── Comparison with yesterday ──
+async function getYesterdayTemp(lat, lon) {
+  try {
+    const yesterday = new Date(Date.now() - 86400000);
+    const date = yesterday.toISOString().split('T')[0];
+    const hr = new Date().getHours();
+    const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${date}&end_date=${date}&hourly=temperature_2m&timezone=auto`;
+    const r = await fetch(url);
+    const d = await r.json();
+    if(d.hourly && d.hourly.temperature_2m && d.hourly.temperature_2m[hr] != null){
+      return d.hourly.temperature_2m[hr];
+    }
+  } catch(_) {}
+  return null;
+}
+
+function moonPhase(date) {
+  const days = (date - new Date('2000-01-06T00:00:00Z')) / 86400000;
+  const phase = ((days % 29.53058867) + 29.53058867) % 29.53058867;
+  const pct = Math.round((phase / 29.53058867) * 100);
+  let sym, name, txt;
   if(phase<1.85||phase>27.68){sym='🌑';name='LUNA NUEVA';txt='La luna no es visible. Perfecta para la astronomía: el cielo es completamente oscuro.';}
   else if(phase<7.38){sym='🌒';name='CRECIENTE';txt='La luna crece hacia la derecha. Visible al atardecer en el hemisferio norte.';}
   else if(phase<9.22){sym='🌓';name='CUARTO CRECIENTE';txt='Exactamente mitad iluminada. Sale al mediodía y se pone a medianoche.';}
@@ -577,7 +759,7 @@ function moonPhase(date){
   else if(phase<22.15){sym='🌖';name='GIBOSA MENGUANTE';txt='Brilla desde medianoche. Sale más tarde cada noche.';}
   else if(phase<23.99){sym='🌗';name='CUARTO MENGUANTE';txt='Sale a medianoche y se pone al mediodía. Mitad oscura hacia el este.';}
   else{sym='🌘';name='MENGUANTE';txt='Últimos días del ciclo. Solo visible de madrugada antes del amanecer.';}
-  return{sym,name,pct,txt};
+  return {sym, name, pct, txt};
 }
 
 const CURIOS=[
@@ -603,7 +785,6 @@ async function requestNotif(){
   if(p==='granted'){$('notif-banner').style.display='none';localStorage.setItem('wx-notif','1');scheduleNotif();alert('¡Notificaciones activadas! Recibirás el resumen cada mañana a las 8:00.');}
   else{alert('Permiso denegado. Actívalo en Ajustes > Safari > Notificaciones.');}
 }
-
 function scheduleNotif(){
   if(Notification.permission!=='granted')return;
   const now=new Date(),next=new Date(now);
@@ -611,10 +792,9 @@ function scheduleNotif(){
   if(now>=next)next.setDate(next.getDate()+1);
   setTimeout(()=>{sendMorningNotif();setInterval(sendMorningNotif,86400000);},(next-now));
 }
-
 function sendMorningNotif(){
   new Notification('☀ Buenos días · WX',{
-    body:`${$('city-name').textContent}: ${$('temp').textContent}°C · ${$('cond').textContent}\nViento ${$('s-wind').textContent} · UV ${$('uv-val').textContent}\nAbre WX para el pronóstico completo`,
+    body:`${$('city-name').textContent}: ${$('temp').textContent}°C · ${$('cond').textContent}\nViento ${$('s-wind').textContent} · UV ${$('uv-val').textContent}`,
     icon:'./icon-192.svg',badge:'./icon-192.svg',
   });
 }
@@ -624,7 +804,7 @@ if('Notification'in window&&Notification.permission!=='granted'&&!localStorage.g
 if(localStorage.getItem('wx-notif')==='1'&&Notification.permission==='granted'){scheduleNotif();}
 
 async function run(){
-  setLoad('OBTENIENDO UBICACIÓN...',10);
+  setLoad('OBTENIENDO UBICACIÓN...',8);
   let lat,lon;
   try{
     const pos=await new Promise((res,rej)=>navigator.geolocation.getCurrentPosition(res,rej,{timeout:12000,enableHighAccuracy:true}));
@@ -633,7 +813,7 @@ async function run(){
     hideLoader();$('city-name').textContent='SIN GPS';$('updated').textContent='ACTIVA EL GPS Y RECARGA';return;
   }
 
-  setLoad('LOCALIZANDO...',28);
+  setLoad('LOCALIZANDO...',22);
   let city='MI UBICACIÓN',cc='';
   try{
     const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,{headers:{'Accept-Language':'es'}});
@@ -643,66 +823,157 @@ async function run(){
   }catch(_){}
   $('city-name').textContent=city;$('loc-lbl').textContent=cc||'GPS';
 
-  setLoad('DESCARGANDO TIEMPO...',52);
+  setLoad('DESCARGANDO DATOS...',45);
   const wUrl=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
     +`&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,`
     +`weather_code,surface_pressure,wind_speed_10m,wind_gusts_10m,cloud_cover,visibility,uv_index,dew_point_2m`
-    +`&hourly=temperature_2m,weather_code,precipitation_probability`
-    +`&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max`
+    +`&hourly=temperature_2m,weather_code,precipitation_probability,precipitation`
+    +`&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,precipitation_sum`
     +`&timezone=auto&forecast_days=7`;
-  const aqUrl=`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10&timezone=auto`;
+  const aqUrl=`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10,grass_pollen,olive_pollen,birch_pollen&timezone=auto`;
 
   let wx,aq;
   try{[wx,aq]=await Promise.all([fetch(wUrl).then(r=>r.json()),fetch(aqUrl).then(r=>r.json())]);}
   catch(e){$('updated').textContent='ERROR AL DESCARGAR DATOS';hideLoader();return;}
 
-  setLoad('PROCESANDO...',82);
+  setLoad('PROCESANDO...',72);
   const c=wx.current,d=wx.daily,h=wx.hourly,now=new Date();
   const isNight=now.getHours()<6||now.getHours()>=21;
 
-  // HERO
+  // ── ALERTS ──
+  const alert = generateAlert(c, d, h);
+  if(alert){
+    const banner = $('alert-banner');
+    banner.classList.add('show');
+    if(alert.severe) banner.classList.add('severe');
+    $('alert-title-text').textContent = alert.title;
+    $('alert-msg').textContent = alert.msg;
+  }
+
+  // ── HERO ──
   $('temp').textContent=f0(c.temperature_2m);
   $('cond').textContent=wmoTxt(c.weather_code);
   $('hilo').textContent=`↑${f0(d.temperature_2m_max[0])}° ↓${f0(d.temperature_2m_min[0])}°`;
   $('hero-icon').innerHTML=`<use href="#${wmoIcon(c.weather_code,isNight)}"/>`;
 
-  // STRIP
+  // ── FEELS LIKE WARNING ──
+  const feelsDiff = Math.abs(c.apparent_temperature - c.temperature_2m);
+  if(feelsDiff >= 5){
+    const warning = $('feels-warning');
+    warning.classList.add('show');
+    if(c.apparent_temperature > c.temperature_2m){
+      $('feels-warning-text').textContent = `// SE SIENTE COMO ${f0(c.apparent_temperature)}° · MUCHO MÁS CALUROSO POR LA HUMEDAD`;
+    } else {
+      $('feels-warning-text').textContent = `// SE SIENTE COMO ${f0(c.apparent_temperature)}° · MÁS FRÍO POR EL VIENTO`;
+    }
+  }
+
+  // ── STRIP ──
   $('s-feels').textContent=f0(c.apparent_temperature)+'°';
   $('s-hum').textContent=f0(c.relative_humidity_2m)+'%';
   $('s-wind').textContent=f0(c.wind_speed_10m)+'km/h';
   $('s-prec').textContent=f1(c.precipitation)+'mm';
   $('updated').textContent='ACTUALIZADO · '+now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
 
-  // UV
+  // ── RAIN BARS (next 12h) ──
+  const nowHour = now.getHours();
+  let startIdx = h.time.findIndex(t => new Date(t).getHours() === nowHour);
+  if(startIdx < 0) startIdx = 0;
+
+  const rainHours = 12;
+  const rainData = [];
+  for(let i = startIdx; i < Math.min(startIdx + rainHours, h.time.length); i++){
+    rainData.push({
+      time: new Date(h.time[i]).getHours(),
+      pct: h.precipitation_probability[i] || 0,
+      mm: h.precipitation[i] || 0
+    });
+  }
+
+  const rainBarsEl = $('rain-bars');
+  rainBarsEl.innerHTML = '';
+  let maxRain = 0, sumRain = 0;
+  rainData.forEach((r, i) => {
+    maxRain = Math.max(maxRain, r.pct);
+    sumRain += r.pct;
+
+    let category = 'dry';
+    if(r.pct >= 80) category = 'extreme';
+    else if(r.pct >= 60) category = 'high';
+    else if(r.pct >= 30) category = 'med';
+    else if(r.pct >= 10) category = 'low';
+
+    const bar = document.createElement('div');
+    bar.className = 'rain-bar';
+    const height = r.pct === 0 ? 2 : Math.max(4, (r.pct / 100) * 58);
+    const showLabel = i % 2 === 0;  // show time every 2 hours
+    bar.innerHTML = `
+      <div class="rain-bar-track">
+        <div class="rain-bar-fill ${category}" style="height:${height}px;">
+          ${r.pct >= 15 ? `<div class="rain-bar-pct">${r.pct}%</div>` : ''}
+        </div>
+      </div>
+      ${showLabel ? `<div class="rain-bar-time">${i === 0 ? 'AHORA' : r.time + 'H'}</div>` : ''}
+    `;
+    rainBarsEl.appendChild(bar);
+  });
+
+  const avgRain = Math.round(sumRain / rainData.length);
+  $('rain-max').textContent = maxRain + '%';
+  $('rain-avg').textContent = avgRain + '%';
+
+  let verdict = '';
+  if(maxRain < 10) verdict = 'NO LLOVERÁ';
+  else if(maxRain < 30) verdict = 'PROBABILIDAD BAJA';
+  else if(maxRain < 60) verdict = 'POSIBLES LLUVIAS';
+  else if(maxRain < 80) verdict = 'LLUVIA PROBABLE';
+  else verdict = 'LLOVERÁ · LLEVA PARAGUAS';
+  $('rain-verdict').innerHTML = `<strong>${verdict}</strong>`;
+
+  $('rain-subtitle').textContent = `MAX ${maxRain}% · ${rainData.length}H VISTA`;
+
+  // ── UV ──
   const uvRaw=c.uv_index!=null?Number(c.uv_index):0;
   const uvI=uvInfo(uvRaw);
   $('uv-val').textContent=f1(uvRaw);$('uv-lbl').textContent=uvI.lbl;
   $('uv-bar').style.width=Math.min(uvI.pct,100)+'%';
 
-  // STATS
+  // ── STATS ──
   $('st-pres').textContent=f0(c.surface_pressure)+' hPa';$('st-pres-s').textContent=presLbl(c.surface_pressure);
   $('st-vis').textContent=f1(c.visibility/1000);
   $('st-dew').textContent=f0(c.dew_point_2m)+'°';$('st-dew-s').textContent=dewLbl(c.dew_point_2m,c.temperature_2m);
   $('st-cloud').textContent=c.cloud_cover+'%';$('st-cloud-s').textContent=cloudLbl(c.cloud_cover);
   $('st-gust').textContent=f0(c.wind_gusts_10m);
 
-  // HOURLY
+  // ── POLLEN ──
+  const grassP = aq.current?.grass_pollen ?? 0;
+  const oliveP = aq.current?.olive_pollen ?? 0;
+  const birchP = aq.current?.birch_pollen ?? 0;
+  const gi = pollenInfo(grassP), oi = pollenInfo(oliveP), bi = pollenInfo(birchP);
+  renderPollenDots('pollen-grass', gi);
+  renderPollenDots('pollen-olive', oi);
+  renderPollenDots('pollen-birch', bi);
+  $('pollen-grass-lvl').textContent = gi.lvl;
+  $('pollen-olive-lvl').textContent = oi.lvl;
+  $('pollen-birch-lvl').textContent = bi.lvl;
+  $('pollen-grass-val').textContent = f0(grassP) + ' gr/m³';
+  $('pollen-olive-val').textContent = f0(oliveP) + ' gr/m³';
+  $('pollen-birch-val').textContent = f0(birchP) + ' gr/m³';
+
+  // ── HOURLY ──
   const hEl=$('hourly');
-  const nowH=now.getHours();
-  let si=h.time.findIndex(t=>new Date(t).getHours()===nowH);
-  if(si<0)si=0;
-  for(let i=si;i<Math.min(si+24,h.time.length);i++){
+  for(let i=startIdx;i<Math.min(startIdx+24,h.time.length);i++){
     const hr=new Date(h.time[i]).getHours();
     const night=hr<6||hr>=21;
     const ico=wmoIcon(h.weather_code[i],night);
-    const lbl=i===si?'AHORA':hr+'H';
+    const lbl=i===startIdx?'AHORA':hr+'H';
     const el=document.createElement('div');
-    el.className='hi'+(i===si?' now':'');
+    el.className='hi'+(i===startIdx?' now':'');
     el.innerHTML=`<div class="ht">${lbl}</div><svg class="hi-ico"><use href="#${ico}"/></svg><div class="hv">${f0(h.temperature_2m[i])}°</div><div class="hp">${h.precipitation_probability[i]}%</div>`;
     hEl.appendChild(el);
   }
 
-  // WEEKLY
+  // ── WEEKLY ──
   const wEl=$('weekly');
   const DAYS=['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
   const maxH2=Math.max(...d.temperature_2m_max),minL=Math.min(...d.temperature_2m_min),rng=maxH2-minL||1;
@@ -715,7 +986,7 @@ async function run(){
     wEl.appendChild(row);
   });
 
-  // SUN ARC
+  // ── SUN ──
   const srStr=fmtTime(d.sunrise[0]),ssStr=fmtTime(d.sunset[0]);
   $('sunrise').textContent=srStr;$('sunset').textContent=ssStr;
   $('dawn-lbl').textContent='alba '+addMins(srStr,-28);$('dusk-lbl').textContent='ocaso '+addMins(ssStr,20);
@@ -730,26 +1001,40 @@ async function run(){
   $('sun-dot').setAttribute('cx',sx.toFixed(1));$('sun-dot').setAttribute('cy',sy.toFixed(1));
   $('sun-dot2').setAttribute('cx',sx.toFixed(1));$('sun-dot2').setAttribute('cy',sy.toFixed(1));
 
-  // GOLDEN
+  // ── GOLDEN ──
   $('gam').textContent=addMins(srStr,-3);$('gam-d').textContent=`hasta ${addMins(srStr,57)} · ~60 min`;
   $('gpm').textContent=addMins(ssStr,-57);$('gpm-d').textContent=`hasta ${addMins(ssStr,3)} · ~60 min`;
 
-  // MOON
+  // ── MOON ──
   const moon=moonPhase(now);
   $('moon-sym').textContent=moon.sym;$('moon-name').textContent=moon.name;
   $('moon-bar').style.width=moon.pct+'%';$('moon-pct').textContent=moon.pct+'%';$('moon-txt').textContent=moon.txt;
 
-  // CURIOSITY
+  // ── CURIOSITY ──
   const cur=CURIOS[now.getDate()%CURIOS.length];
   $('cur-txt').textContent=cur.t;$('cur-bg').textContent=cur.b;
 
-  // AQI
+  // ── AQI ──
   const aqi=aq.current?.european_aqi??0;
   $('aqi-v').textContent=f0(aqi);$('aqi-l').textContent=aqiLbl(aqi);
   $('aqi-bar').style.width=Math.min(aqi,100)+'%';
   $('pm25').textContent=f1(aq.current?.pm2_5??0);$('pm10').textContent=f1(aq.current?.pm10??0);
 
   setLoad('LISTO',100);setTimeout(hideLoader,350);
+
+  // ── VS YESTERDAY (background, doesn't block UI) ──
+  getYesterdayTemp(lat, lon).then(yTemp => {
+    if(yTemp != null){
+      const diff = c.temperature_2m - yTemp;
+      const vs = $('vs-yesterday');
+      vs.style.display = 'inline-flex';
+      const arrow = diff > 0.5 ? '↑' : (diff < -0.5 ? '↓' : '→');
+      $('vs-arrow').textContent = arrow;
+      $('vs-text').textContent = `${diff > 0 ? '+' : ''}${f0(diff)}° vs ayer`;
+      if(diff > 2) vs.classList.add('warmer');
+      else if(diff < -2) vs.classList.add('cooler');
+    }
+  });
 }
 
 if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
