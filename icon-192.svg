@@ -1,7 +1,5 @@
-<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'>
-  <rect width='192' height='192' fill='white'/>
-  <rect x='4' y='4' width='184' height='184' fill='black' rx='20'/>
-  <text x='50%' y='57%' dominant-baseline='middle' text-anchor='middle'
-    font-family='Georgia,serif' font-size='45' font-weight='bold'
-    fill='white' letter-spacing='2'>WX</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" fill="#000000" rx="42"/>
+  <text x="96" y="118" text-anchor="middle" font-family="Georgia, serif" 
+    font-size="88" font-weight="700" fill="white" letter-spacing="-2">WX</text>
 </svg>
