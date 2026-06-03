@@ -1,5 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- Black rounded square base (iOS style, 22% radius) -->
   <rect width="192" height="192" fill="#000000" rx="42"/>
-  <text x="96" y="118" text-anchor="middle" font-family="Georgia, serif" 
-    font-size="88" font-weight="700" fill="white" letter-spacing="-2">WX</text>
+
+  <!-- Inner subtle frame -->
+  <rect x="14" y="14" width="164" height="164" rx="32" fill="none" stroke="#1a1a1a" stroke-width="1"/>
+
+  <!-- SUN: geometric circle with radiating rays (top-left, off-center) -->
+  <g transform="translate(60, 64)">
+    <!-- Outer rays -->
+    <g stroke="white" stroke-width="2" stroke-linecap="square">
+      <line x1="0" y1="-30" x2="0" y2="-22"/>
+      <line x1="0" y1="22" x2="0" y2="30"/>
+      <line x1="-30" y1="0" x2="-22" y2="0"/>
+      <line x1="22" y1="0" x2="30" y2="0"/>
+      <line x1="-21" y1="-21" x2="-15.5" y2="-15.5"/>
+      <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+      <line x1="21" y1="-21" x2="15.5" y2="-15.5"/>
+      <line x1="-15.5" y1="15.5" x2="-21" y2="21"/>
+    </g>
+    <!-- Sun disc: outlined -->
+    <circle cx="0" cy="0" r="16" fill="none" stroke="white" stroke-width="2.5"/>
+    <!-- Inner dot -->
+    <circle cx="0" cy="0" r="3" fill="white"/>
+  </g>
+
+  <!-- CLOUD: angular, geometric, overlapping sun (bottom-right of sun) -->
+  <g transform="translate(112, 90)">
+    <!-- Bauhaus-style stacked arcs cloud -->
+    <path d="M -28 8 L -28 -2 A 10 10 0 0 1 -18 -12 A 12 12 0 0 1 0 -16 A 14 14 0 0 1 18 -8 A 8 8 0 0 1 24 0 L 24 8 Z"
+      fill="black" stroke="white" stroke-width="2.5" stroke-linejoin="miter"/>
+  </g>
+
+  <!-- WORDMARK: WX at bottom, monospace techy -->
+  <text x="96" y="158" text-anchor="middle"
+    font-family="'Courier New', monospace"
+    font-size="28" font-weight="700"
+    fill="white" letter-spacing="6">WX</text>
+
+  <!-- Small dot grid as retro-futurist detail (top right corner) -->
+  <g fill="white" opacity="0.4">
+    <circle cx="156" cy="32" r="1.5"/>
+    <circle cx="148" cy="32" r="1.5"/>
+    <circle cx="156" cy="40" r="1.5"/>
+  </g>
+
+  <!-- Small horizontal line ticks (bottom left corner) -->
+  <g stroke="white" stroke-width="1" opacity="0.4">
+    <line x1="28" y1="156" x2="36" y2="156"/>
+    <line x1="28" y1="160" x2="32" y2="160"/>
+  </g>
 </svg>
