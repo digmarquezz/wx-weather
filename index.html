@@ -127,6 +127,21 @@
         <circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
         <line x1="15" y1="15" x2="20" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </symbol>
+
+      <!-- REFRESH ICON (two circular arrows) -->
+      <symbol id="ico-refresh" viewBox="0 0 24 24">
+        <path d="M3 12 A9 9 0 0 1 19 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <polyline points="19,2 19,7 14,7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M21 12 A9 9 0 0 1 5 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <polyline points="5,22 5,17 10,17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <!-- SHARE ICON -->
+      <symbol id="ico-share" viewBox="0 0 24 24">
+        <path d="M12 4 L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <polyline points="7,9 12,4 17,9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 14 L5 20 L19 20 L19 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </symbol>
     </defs>
   </svg>
 
@@ -199,6 +214,14 @@
     .gps-pill:hover, .search-btn:hover{color:#000;border-color:#000;}
     .search-btn{padding:6px 8px;}
     .search-btn svg{width:14px;height:14px;}
+    .refresh-ico{
+      width:11px;height:11px;
+      margin-left:2px;
+      color:var(--g4);
+      transition:transform 0.6s ease, color 0.2s;
+    }
+    .gps-pill:hover .refresh-ico{color:#000;}
+    .gps-pill:active .refresh-ico{transform:rotate(180deg);}
     .dot{
       width:6px;height:6px;border-radius:50%;
       background:#000;animation:blink 2s infinite;
@@ -682,6 +705,131 @@
       letter-spacing:0.06em;
     }
 
+    /* ─── DAY CHART ─────────────────────────────────── */
+    .day-chart-wrap{
+      margin-top:14px;padding-top:14px;
+      border-top:1px solid var(--g1);
+    }
+    .day-chart-header{
+      display:flex;justify-content:space-between;align-items:baseline;
+      margin-bottom:8px;
+    }
+    .day-chart-label{
+      font-family:'Space Mono',monospace;
+      font-size:7px;font-weight:700;letter-spacing:0.18em;
+      color:var(--g4);text-transform:uppercase;
+    }
+    .day-chart-range{
+      font-family:'Space Mono',monospace;
+      font-size:8px;color:var(--g4);letter-spacing:0.06em;
+    }
+    .day-chart{width:100%;height:46px;display:block;}
+    .day-chart-line{fill:none;stroke:#000;stroke-width:1.5;stroke-linejoin:round;}
+    .day-chart-area{fill:#000;opacity:0.05;}
+    .day-chart-now{fill:#FFD700;stroke:#000;stroke-width:1.5;}
+    .day-chart-axis{fill:none;stroke:var(--g2);stroke-width:1;stroke-dasharray:2 3;}
+    .day-chart-tick{
+      fill:var(--g4);
+      font-family:'Space Mono',monospace;
+      font-size:7px;font-weight:700;letter-spacing:0.04em;
+    }
+
+    /* ─── CLIMATE IMPACT ────────────────────────────── */
+    .climate-card{
+      display:flex;align-items:flex-start;gap:14px;
+    }
+    .climate-icon{
+      width:44px;height:44px;flex-shrink:0;
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
+    }
+    .climate-icon.warm{background:#fff4f2;}
+    .climate-icon.cool{background:#f0f7fc;}
+    .climate-icon.normal{background:var(--g1);}
+    .climate-info{flex:1;}
+    .climate-diff{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:32px;letter-spacing:-0.5px;line-height:1;
+      margin-bottom:4px;
+    }
+    .climate-diff.warm{color:#c0392b;}
+    .climate-diff.cool{color:#2a7fd4;}
+    .climate-text{
+      font-size:11px;line-height:1.55;color:#000;
+      letter-spacing:0.02em;
+    }
+    .climate-source{
+      font-family:'Space Mono',monospace;
+      font-size:7px;letter-spacing:0.14em;
+      color:var(--g4);margin-top:6px;
+    }
+
+    /* ─── SHARE BUTTON ──────────────────────────────── */
+    .share-btn-main{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;padding:14px;
+      background:#000;color:#fff;border:none;
+      border-radius:10px;
+      font-family:'Space Mono',monospace;
+      font-size:10px;font-weight:700;letter-spacing:0.18em;
+      cursor:pointer;
+      transition:transform 0.15s, background 0.15s;
+    }
+    .share-btn-main:active{transform:scale(0.97);}
+    .share-btn-main svg{width:14px;height:14px;}
+
+    /* ─── SHARE MODAL ───────────────────────────────── */
+    .share-modal{
+      display:none;
+      position:fixed;inset:0;z-index:998;
+      background:rgba(0,0,0,0.7);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      align-items:center;justify-content:center;
+      padding:20px;
+    }
+    .share-modal.open{display:flex;animation:fadeIn 0.25s;}
+    .share-modal-content{
+      background:#fff;border-radius:16px;
+      width:100%;max-width:380px;
+      max-height:92vh;overflow-y:auto;
+      padding:18px;
+      box-shadow:0 10px 50px rgba(0,0,0,0.4);
+    }
+    .share-modal-header{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-bottom:14px;
+    }
+    .share-modal-title{
+      font-family:'Space Mono',monospace;
+      font-size:10px;font-weight:700;letter-spacing:0.18em;
+      color:var(--g4);
+    }
+    .share-modal-close{
+      background:#000;color:#fff;border:none;
+      width:32px;height:32px;border-radius:50%;
+      font-size:18px;cursor:pointer;line-height:1;
+    }
+    .share-preview-wrap{
+      border-radius:12px;overflow:hidden;
+      border:1px solid var(--g2);
+      margin-bottom:14px;
+    }
+    .share-preview-canvas{width:100%;display:block;}
+    .share-actions{
+      display:grid;grid-template-columns:1fr 1fr;gap:8px;
+    }
+    .share-action-btn{
+      padding:12px;border:1px solid #000;background:#fff;
+      font-family:'Space Mono',monospace;
+      font-size:9px;font-weight:700;letter-spacing:0.14em;
+      border-radius:8px;cursor:pointer;
+      transition:all 0.15s;
+    }
+    .share-action-btn:active{transform:scale(0.97);}
+    .share-action-btn.primary{background:#000;color:#fff;}
+
     /* ─── FOOTER ──────────────────────────────────────── */
     .footer{
       text-align:center;padding:20px 16px 8px;
@@ -789,9 +937,10 @@
       <div class="search-btn" id="search-btn" title="Buscar ciudad">
         <svg><use href="#ico-search"/></svg>
       </div>
-      <div class="gps-pill" id="gps-pill" title="Refrescar">
+      <div class="gps-pill" id="gps-pill" title="Refrescar" onclick="location.reload()">
         <div class="dot" id="loc-dot"></div>
         <span id="loc-lbl">GPS</span>
+        <svg class="refresh-ico" viewBox="0 0 24 24"><use href="#ico-refresh"/></svg>
       </div>
     </div>
   </div>
@@ -831,6 +980,15 @@
     <div class="hilo" id="hilo">—</div>
     <div class="feels-warning" id="feels-warning">
       <span id="feels-warning-text">—</span>
+    </div>
+
+    <!-- DAY CHART -->
+    <div class="day-chart-wrap" id="day-chart-wrap" style="display:none;">
+      <div class="day-chart-header">
+        <span class="day-chart-label">EVOLUCIÓN HOY · 0H — 23H</span>
+        <span class="day-chart-range" id="day-chart-range">—</span>
+      </div>
+      <svg class="day-chart" id="day-chart" viewBox="0 0 300 50" preserveAspectRatio="none"></svg>
     </div>
   </div>
 
@@ -1033,16 +1191,56 @@
     </div>
   </div>
 
+  <!-- CLIMATE IMPACT -->
+  <div class="card" id="card-climate" style="display:none;">
+    <div class="card-label">IMPACTO CLIMÁTICO</div>
+    <div class="climate-card">
+      <div class="climate-icon" id="climate-icon">🌡</div>
+      <div class="climate-info">
+        <div class="climate-diff" id="climate-diff">—</div>
+        <div class="climate-text" id="climate-text">—</div>
+        <div class="climate-source" id="climate-source">// FUENTE · OPEN-METEO ARCHIVE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE -->
+  <div class="card">
+    <div class="card-label">COMPARTIR EL TIEMPO</div>
+    <button class="share-btn-main" id="share-btn-main">
+      <svg><use href="#ico-share"/></svg>
+      <span>CREAR POSTAL Y COMPARTIR</span>
+    </button>
+  </div>
+
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-txt">
       METEOROLOGÍA · <a href="https://open-meteo.com" target="_blank">OPEN-METEO.COM</a><br/>
       CALIDAD DEL AIRE · <a href="https://open-meteo.com" target="_blank">OPEN-METEO AIR QUALITY</a><br/>
+      HISTÓRICO · <a href="https://open-meteo.com" target="_blank">OPEN-METEO ARCHIVE</a><br/>
       GEOCODIFICACIÓN · <a href="https://nominatim.openstreetmap.org" target="_blank">NOMINATIM / OSM</a><br/>
       WX · <span id="yr"></span>
     </div>
   </div>
 
+</div>
+
+<!-- SHARE MODAL -->
+<div class="share-modal" id="share-modal">
+  <div class="share-modal-content">
+    <div class="share-modal-header">
+      <div class="share-modal-title">// POSTAL · WX</div>
+      <button class="share-modal-close" id="share-modal-close">×</button>
+    </div>
+    <div class="share-preview-wrap">
+      <canvas id="share-canvas" class="share-preview-canvas" width="600" height="800"></canvas>
+    </div>
+    <div class="share-actions">
+      <button class="share-action-btn primary" id="share-do">COMPARTIR ↗</button>
+      <button class="share-action-btn" id="share-download">DESCARGAR ↓</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1499,6 +1697,293 @@ function useGPS(){
   location.reload();
 }
 
+// ─── DAY CHART ────────────────────────────────────────
+function renderDayChart(h){
+  const today = new Date().toISOString().split('T')[0];
+  const todayTemps = [];
+  for(let i = 0; i < h.time.length; i++){
+    if(h.time[i].startsWith(today)){
+      todayTemps.push({
+        hr: new Date(h.time[i]).getHours(),
+        temp: h.temperature_2m[i]
+      });
+    }
+  }
+  if(todayTemps.length < 4) return;
+
+  $('day-chart-wrap').style.display = 'block';
+  const min = Math.min(...todayTemps.map(t => t.temp));
+  const max = Math.max(...todayTemps.map(t => t.temp));
+  const range = max - min || 1;
+  $('day-chart-range').textContent = `${f0(min)}° ↔ ${f0(max)}°`;
+
+  // Map points to SVG (300 wide, 50 tall, 5px padding)
+  const W = 300, H = 50, padY = 6;
+  const points = todayTemps.map((p, i) => {
+    const x = (i / (todayTemps.length - 1)) * W;
+    const y = H - padY - ((p.temp - min) / range) * (H - padY * 2);
+    return {x, y, hr: p.hr};
+  });
+
+  const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+  const areaD = pathD + ` L ${W},${H} L 0,${H} Z`;
+
+  const nowHr = new Date().getHours();
+  const nowPoint = points.find(p => p.hr === nowHr) || points[points.length - 1];
+
+  // Ticks at 0h, 6h, 12h, 18h
+  const ticks = [0, 6, 12, 18].map(hr => {
+    const idx = todayTemps.findIndex(t => t.hr === hr);
+    if(idx < 0) return '';
+    const p = points[idx];
+    return `<line x1="${p.x.toFixed(1)}" y1="${H-4}" x2="${p.x.toFixed(1)}" y2="${H}" stroke="#bbb" stroke-width="1"/>
+            <text x="${p.x.toFixed(1)}" y="${H+1}" text-anchor="middle" class="day-chart-tick" style="font-size:5px;display:none;">${hr}H</text>`;
+  }).join('');
+
+  $('day-chart').innerHTML = `
+    <path class="day-chart-area" d="${areaD}"/>
+    <path class="day-chart-line" d="${pathD}"/>
+    <circle class="day-chart-now" cx="${nowPoint.x.toFixed(1)}" cy="${nowPoint.y.toFixed(1)}" r="3"/>
+    ${ticks}
+  `;
+}
+
+// ─── CLIMATE IMPACT (historical comparison) ───────────
+async function loadClimateImpact(lat, lon, currentTemp){
+  try {
+    // Get historical data for the same date over last 20 years
+    const today = new Date();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const startYear = today.getFullYear() - 21;
+    const endYear = today.getFullYear() - 1;
+
+    // Get max temp for the same day across recent history
+    const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}`
+      + `&start_date=${startYear}-${month}-${day}&end_date=${endYear}-${month}-${day}`
+      + `&daily=temperature_2m_max&timezone=auto`;
+
+    const r = await fetch(url);
+    const data = await r.json();
+
+    if(!data.daily || !data.daily.temperature_2m_max) return;
+
+    const historical = data.daily.temperature_2m_max.filter(t => t != null);
+    if(historical.length < 5) return;
+
+    const avgMax = historical.reduce((a, b) => a + b, 0) / historical.length;
+    const todayMax = currentTemp;
+    const diff = todayMax - avgMax;
+
+    let text, iconClass, diffClass;
+    const absDiff = Math.abs(diff);
+
+    if(absDiff < 0.5) {
+      iconClass = 'normal';
+      diffClass = '';
+      text = `Temperatura prácticamente igual a la media histórica para hoy (${f1(avgMax)}°C entre ${startYear}–${endYear}).`;
+    } else if(diff > 0) {
+      iconClass = 'warm';
+      diffClass = 'warm';
+      const ctx = absDiff > 5 ? 'mucho más caluroso' : absDiff > 2 ? 'más caluroso' : 'algo más caluroso';
+      text = `Hoy es ${ctx} que la media histórica para esta fecha en tu zona (${f1(avgMax)}°C de media entre ${startYear}–${endYear}).`;
+    } else {
+      iconClass = 'cool';
+      diffClass = 'cool';
+      const ctx = absDiff > 5 ? 'mucho más frío' : absDiff > 2 ? 'más frío' : 'algo más frío';
+      text = `Hoy es ${ctx} que la media histórica para esta fecha en tu zona (${f1(avgMax)}°C de media entre ${startYear}–${endYear}).`;
+    }
+
+    $('card-climate').style.display = 'block';
+    $('card-climate').classList.add('visible');
+    $('climate-icon').className = 'climate-icon ' + iconClass;
+    $('climate-icon').textContent = iconClass === 'warm' ? '🔥' : iconClass === 'cool' ? '❄' : '🌡';
+    $('climate-diff').className = 'climate-diff ' + diffClass;
+    $('climate-diff').textContent = (diff > 0 ? '+' : '') + f1(diff) + '°C';
+    $('climate-text').textContent = text;
+    $('climate-source').textContent = `// FUENTE · OPEN-METEO ARCHIVE · ${historical.length} AÑOS`;
+  } catch(e) {
+    // Silent fail
+  }
+}
+
+// ─── SHARE POSTCARD ───────────────────────────────────
+function buildSharePostcard() {
+  const canvas = $('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 600, H = 800;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  // Outer black frame
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(20, 20, W - 40, H - 40);
+
+  // Top label "WX"
+  ctx.fillStyle = '#000';
+  ctx.font = '700 18px "Space Mono", monospace';
+  ctx.textAlign = 'left';
+  ctx.letterSpacing = '8px';
+  ctx.fillText('W X', 50, 70);
+
+  // Top right: date
+  ctx.font = '700 11px "Space Mono", monospace';
+  ctx.textAlign = 'right';
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', year:'numeric'});
+  ctx.fillStyle = '#777';
+  ctx.fillText(dateStr.toUpperCase() + ' · ' + now.toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'}), W - 50, 70);
+
+  // City name
+  ctx.fillStyle = '#777';
+  ctx.font = '700 13px "Space Mono", monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText($('city-name').textContent, 50, 120);
+
+  // BIG temperature
+  const temp = $('temp').textContent;
+  ctx.fillStyle = '#000';
+  ctx.font = '700 280px "Bebas Neue", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(temp, W/2 - 30, 380);
+
+  // Degree symbol
+  ctx.fillStyle = '#bbb';
+  ctx.font = '700 90px "Bebas Neue", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('°', W/2 + 110, 290);
+
+  // Condition
+  ctx.fillStyle = '#000';
+  ctx.font = '700 18px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  const cond = $('cond').textContent;
+  ctx.fillText(cond, W/2, 440);
+
+  // Divider
+  ctx.strokeStyle = '#e8e8e8';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(50, 480);
+  ctx.lineTo(W - 50, 480);
+  ctx.stroke();
+
+  // Stats grid
+  const stats = [
+    {l: 'SENSACIÓN', v: $('s-feels').textContent},
+    {l: 'HUMEDAD', v: $('s-hum').textContent},
+    {l: 'VIENTO', v: $('s-wind').textContent},
+    {l: 'MAX/MIN', v: $('hilo').textContent.replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim()},
+  ];
+  const colW = (W - 100) / 4;
+  stats.forEach((s, i) => {
+    const x = 50 + i * colW + colW / 2;
+    ctx.fillStyle = '#000';
+    ctx.font = '700 24px "Inter", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(s.v, x, 540);
+
+    ctx.fillStyle = '#777';
+    ctx.font = '700 9px "Space Mono", monospace';
+    ctx.fillText(s.l, x, 560);
+  });
+
+  // Divider
+  ctx.beginPath();
+  ctx.moveTo(50, 610);
+  ctx.lineTo(W - 50, 610);
+  ctx.stroke();
+
+  // Bottom: app branding
+  ctx.fillStyle = '#000';
+  ctx.font = '700 22px "Bebas Neue", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('TIEMPO · DIGMARQUEZZ.ONLINE', W/2, 680);
+
+  // Hashtag
+  ctx.fillStyle = '#777';
+  ctx.font = '700 10px "Space Mono", monospace';
+  ctx.fillText('// WX · APP DEL TIEMPO MINIMALISTA', W/2, 720);
+
+  // Corner brackets (instrument look)
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1.5;
+  const corners = [[40,40],[W-40,40],[40,H-40],[W-40,H-40]];
+  corners.forEach(([cx, cy], i) => {
+    ctx.beginPath();
+    const dx = cx < W/2 ? 12 : -12;
+    const dy = cy < H/2 ? 12 : -12;
+    ctx.moveTo(cx, cy + dy);
+    ctx.lineTo(cx, cy);
+    ctx.lineTo(cx + dx, cy);
+    ctx.stroke();
+  });
+
+  // Yellow accent dot
+  ctx.fillStyle = '#FFD700';
+  ctx.beginPath();
+  ctx.arc(W - 60, 60, 5, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+async function doShare() {
+  buildSharePostcard();
+  const canvas = $('share-canvas');
+  if(navigator.share && navigator.canShare){
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], 'wx-tiempo.png', {type: 'image/png'});
+      try {
+        if(navigator.canShare({files: [file]})){
+          await navigator.share({
+            files: [file],
+            title: 'WX · El tiempo',
+            text: `${$('city-name').textContent}: ${$('temp').textContent}° · ${$('cond').textContent}`,
+          });
+        }
+      } catch(e){}
+    });
+  } else {
+    // Fallback: download
+    doDownload();
+  }
+}
+
+function doDownload() {
+  const canvas = $('share-canvas');
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `wx-tiempo-${new Date().toISOString().split('T')[0]}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+  });
+}
+
+function setupShare() {
+  $('share-btn-main').addEventListener('click', () => {
+    buildSharePostcard();
+    $('share-modal').classList.add('open');
+  });
+  $('share-modal-close').addEventListener('click', () => $('share-modal').classList.remove('open'));
+  $('share-modal').addEventListener('click', (e) => {
+    if(e.target === $('share-modal')) $('share-modal').classList.remove('open');
+  });
+  $('share-do').addEventListener('click', doShare);
+  $('share-download').addEventListener('click', doDownload);
+}
+
+setupShare();
+
 // ─── MAIN ─────────────────────────────────────────────
 $('yr').textContent=new Date().getFullYear();
 setupSearch();
@@ -1758,6 +2243,12 @@ async function run(){
   const cur = CURIOS[now.getDate() % CURIOS.length];
   $('cur-txt').textContent = cur.t;
   $('cur-bg').textContent = cur.b;
+
+  // ── DAY CHART ──
+  renderDayChart(h);
+
+  // ── CLIMATE IMPACT (async, doesn't block) ──
+  loadClimateImpact(lat, lon, d.temperature_2m_max[0]);
 
   // ── AQI ──
   const aqi = aq.current?.european_aqi ?? 0;
