@@ -567,6 +567,8 @@
       padding:11px 0;border-bottom:1px solid var(--g1);
     }
     .wr:last-child{border-bottom:none;}
+    .wr.clickable{cursor:pointer;transition:background 0.15s;}
+    .wr.clickable:active{background:var(--g1);}
     .wd{font-size:9px;font-weight:700;letter-spacing:0.12em;width:32px;}
     .w-ico{width:24px;height:24px;flex-shrink:0;}
     .wbw{flex:1;display:flex;align-items:center;gap:8px;}
@@ -576,6 +578,48 @@
     .btf{height:100%;background:#000;border-radius:2px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1);}
     .wpp{font-size:8px;color:var(--g4);width:30px;text-align:right;
       font-family:'Space Mono',monospace;}
+    .w-chevron{
+      width:12px;height:12px;flex-shrink:0;
+      color:var(--g3);
+      transition:transform 0.3s ease;
+    }
+    .wr.open .w-chevron{transform:rotate(180deg);color:#000;}
+
+    /* Day detail panel (accordion) */
+    .w-detail{
+      max-height:0;overflow:hidden;
+      transition:max-height 0.35s ease;
+    }
+    .w-detail.open{max-height:340px;}
+    .w-detail-inner{
+      padding:14px 4px 16px;
+      display:grid;grid-template-columns:1fr 1fr;gap:1px;
+      background:var(--g2);
+      border:1px solid var(--g2);border-radius:8px;
+      overflow:hidden;
+      margin:4px 0 8px;
+    }
+    .w-detail-cell{
+      background:#fff;padding:11px 12px;
+    }
+    .w-detail-lbl{
+      font-family:'Space Mono',monospace;
+      font-size:7px;font-weight:700;letter-spacing:0.14em;
+      color:var(--g4);margin-bottom:3px;
+    }
+    .w-detail-val{
+      font-size:14px;font-weight:700;letter-spacing:-0.01em;
+    }
+    .w-detail-sub{
+      font-size:8px;color:var(--g4);margin-top:1px;
+    }
+    .w-detail-cond{
+      grid-column:1/-1;background:#000;
+      padding:12px;text-align:center;
+    }
+    .w-detail-cond-txt{
+      color:#fff;font-size:11px;font-weight:700;letter-spacing:0.14em;
+    }
 
     /* ─── STATS GRID ─────────────────────────────────── */
     .sgrid{
@@ -906,7 +950,9 @@
     }
     /* ── PULL TO REFRESH ─────────────────────────── */
     .ptr-indicator{
-      position:fixed;top:0;left:0;right:0;
+      position:fixed;
+      top:var(--safe-top);
+      left:0;right:0;
       display:flex;justify-content:center;align-items:center;
       height:0;overflow:hidden;
       transition:height 0.25s ease;
@@ -979,19 +1025,21 @@
 
     /* ── BREATHING ICONS ─────────────────────────── */
     .hero-icon{
-      animation:iconBreath 5s ease-in-out infinite;
+      animation:iconBreath 3.5s ease-in-out infinite;
+      transform-origin:center;
     }
     @keyframes iconBreath{
       0%,100%{transform:scale(1);filter:drop-shadow(0 2px 8px rgba(0,0,0,0.08));}
-      50%{transform:scale(1.03);filter:drop-shadow(0 3px 12px rgba(0,0,0,0.12));}
+      50%{transform:scale(1.09);filter:drop-shadow(0 6px 16px rgba(0,0,0,0.18));}
     }
     .moon-sym{
-      animation:moonBreath 6s ease-in-out infinite;
+      animation:moonBreath 4s ease-in-out infinite;
       display:inline-block;
+      transform-origin:center;
     }
     @keyframes moonBreath{
       0%,100%{transform:scale(1);filter:drop-shadow(0 1px 4px rgba(0,0,0,0.1));}
-      50%{transform:scale(1.04);filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15));}
+      50%{transform:scale(1.1);filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2));}
     }
     /* respect prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce) {
@@ -1137,7 +1185,10 @@
       <button class="tab" id="tab-w" onclick="swTab('w')">7 DÍAS</button>
     </div>
     <div id="ph"><div class="hscroll" id="hourly"></div></div>
-    <div id="pw" style="display:none"><div id="weekly"></div></div>
+    <div id="pw" style="display:none">
+      <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--g4);margin-bottom:10px;">// PULSA EN LOS 3 PRÓXIMOS DÍAS PARA VER MÁS</div>
+      <div id="weekly"></div>
+    </div>
   </div>
 
   <!-- CONDITIONS -->
@@ -2157,7 +2208,7 @@ async function run(){
     + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,`
     + `weather_code,surface_pressure,wind_speed_10m,wind_gusts_10m,cloud_cover,visibility,uv_index,dew_point_2m`
     + `&hourly=temperature_2m,weather_code,precipitation_probability,precipitation`
-    + `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,precipitation_sum`
+    + `&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_probability_max,uv_index_max,precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max,daylight_duration`
     + `&timezone=auto&forecast_days=7`;
   const aqUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10,grass_pollen,olive_pollen,birch_pollen&timezone=auto`;
 
@@ -2312,15 +2363,91 @@ async function run(){
   // ── WEEKLY ──
   const wEl = $('weekly');
   const DAYS = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+  const DAYS_FULL = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
   const maxH2 = Math.max(...d.temperature_2m_max), minL = Math.min(...d.temperature_2m_min), rng = maxH2 - minL || 1;
+  wEl.innerHTML = '';
   d.time.forEach((date, i) => {
     const day = i === 0 ? 'HOY' : DAYS[new Date(date + 'T12:00:00').getDay()];
     const pct = ((d.temperature_2m_max[i] - minL) / rng * 100).toFixed(0);
     const ico = wmoIcon(d.weather_code[i], false);
+    const expandable = i <= 2; // first 3 days clickable
+
     const row = document.createElement('div');
-    row.className = 'wr';
-    row.innerHTML = `<div class="wd">${day}</div><svg class="w-ico"><use href="#${ico}"/></svg><div class="wbw"><div class="wlo">${f0(d.temperature_2m_min[i])}°</div><div class="btr"><div class="btf" style="width:${pct}%"></div></div><div class="whi">${f0(d.temperature_2m_max[i])}°</div></div><div class="wpp">${d.precipitation_probability_max[i]}%</div>`;
+    row.className = 'wr' + (expandable ? ' clickable' : '');
+
+    const chevron = expandable
+      ? `<svg class="w-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>`
+      : `<span style="width:12px;flex-shrink:0;"></span>`;
+
+    row.innerHTML = `<div class="wd">${day}</div><svg class="w-ico"><use href="#${ico}"/></svg><div class="wbw"><div class="wlo">${f0(d.temperature_2m_min[i])}°</div><div class="btr"><div class="btf" style="width:${pct}%"></div></div><div class="whi">${f0(d.temperature_2m_max[i])}°</div></div><div class="wpp">${d.precipitation_probability_max[i]}%</div>${chevron}`;
+
     wEl.appendChild(row);
+
+    if(expandable){
+      const detail = document.createElement('div');
+      detail.className = 'w-detail';
+
+      const srStr = fmtTime(d.sunrise[i]);
+      const ssStr = fmtTime(d.sunset[i]);
+      const daylightH = d.daylight_duration ? Math.floor(d.daylight_duration[i] / 3600) : '—';
+      const daylightM = d.daylight_duration ? Math.floor((d.daylight_duration[i] % 3600) / 60) : '—';
+      const appMax = d.apparent_temperature_max ? f0(d.apparent_temperature_max[i]) : '—';
+      const appMin = d.apparent_temperature_min ? f0(d.apparent_temperature_min[i]) : '—';
+      const windMax = d.wind_speed_10m_max ? f0(d.wind_speed_10m_max[i]) : '—';
+      const gustMax = d.wind_gusts_10m_max ? f0(d.wind_gusts_10m_max[i]) : '—';
+      const uvMax = d.uv_index_max ? f1(d.uv_index_max[i]) : '—';
+      const precSum = d.precipitation_sum ? f1(d.precipitation_sum[i]) : '0';
+
+      detail.innerHTML = `
+        <div class="w-detail-inner">
+          <div class="w-detail-cond">
+            <div class="w-detail-cond-txt">${wmoTxt(d.weather_code[i])}</div>
+          </div>
+          <div class="w-detail-cell">
+            <div class="w-detail-lbl">TEMPERATURA</div>
+            <div class="w-detail-val">${f0(d.temperature_2m_max[i])}° / ${f0(d.temperature_2m_min[i])}°</div>
+            <div class="w-detail-sub">máxima / mínima</div>
+          </div>
+          <div class="w-detail-cell">
+            <div class="w-detail-lbl">SENSACIÓN</div>
+            <div class="w-detail-val">${appMax}° / ${appMin}°</div>
+            <div class="w-detail-sub">máx / mín percibida</div>
+          </div>
+          <div class="w-detail-cell">
+            <div class="w-detail-lbl">LLUVIA</div>
+            <div class="w-detail-val">${d.precipitation_probability_max[i]}%</div>
+            <div class="w-detail-sub">${precSum} mm previstos</div>
+          </div>
+          <div class="w-detail-cell">
+            <div class="w-detail-lbl">VIENTO</div>
+            <div class="w-detail-val">${windMax} km/h</div>
+            <div class="w-detail-sub">ráfagas ${gustMax} km/h</div>
+          </div>
+          <div class="w-detail-cell">
+            <div class="w-detail-lbl">ÍNDICE UV</div>
+            <div class="w-detail-val">${uvMax}</div>
+            <div class="w-detail-sub">${uvInfo(uvMax).lbl}</div>
+          </div>
+          <div class="w-detail-cell">
+            <div class="w-detail-lbl">SOL</div>
+            <div class="w-detail-val">${srStr} · ${ssStr}</div>
+            <div class="w-detail-sub">${daylightH}h ${daylightM}min de luz</div>
+          </div>
+        </div>
+      `;
+      wEl.appendChild(detail);
+
+      row.addEventListener('click', () => {
+        const isOpen = detail.classList.contains('open');
+        // Close all others
+        document.querySelectorAll('.w-detail.open').forEach(el => el.classList.remove('open'));
+        document.querySelectorAll('.wr.open').forEach(el => el.classList.remove('open'));
+        if(!isOpen){
+          detail.classList.add('open');
+          row.classList.add('open');
+        }
+      });
+    }
   });
 
   // ── SUN ──
