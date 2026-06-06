@@ -518,14 +518,14 @@
       background:rgba(255,255,255,0.12);
       transition:background 0.2s;
     }
-    .act-item.good{background:var(--green-bg);border-color:var(--green-bg);}
-    .act-item.bad{background:var(--danger-bg);border-color:var(--danger-bg);opacity:0.85;}
+    .act-item.good{background:var(--green-bg);border-color:rgba(42,157,58,0.35);}
+    .act-item.bad{background:var(--danger-bg);border-color:rgba(192,57,43,0.3);opacity:0.92;}
     .act-icon{
       width:18px;height:18px;flex-shrink:0;
       display:flex;align-items:center;justify-content:center;
       border-radius:50%;
       font-size:11px;font-weight:700;
-      color:#fff;line-height:1;
+      color:#fff;line-height:1;margin-top:1px;
     }
     .act-icon.good{background:var(--green);}
     .act-icon.bad{background:var(--danger-border);}
@@ -538,6 +538,10 @@
       font-size:9px;color:var(--text-dim);letter-spacing:0.04em;
       line-height:1.4;
     }
+    /* On the light good/bad backgrounds, switch to dark text for contrast */
+    .act-item.good .act-name, .act-item.bad .act-name{ color:#1a2230; }
+    .act-item.good .act-reason{ color:#3a5a40; }
+    .act-item.bad .act-reason{ color:#7a3a34; }
 
     /* ─── SUMMARY STRIP ──────────────────────────────── */
     .strip{
