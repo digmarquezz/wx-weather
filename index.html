@@ -1997,7 +1997,9 @@ function useGPS(){
 
 // ─── DAY CHART ────────────────────────────────────────
 function renderDayChart(h){
-  const today = new Date().toISOString().split('T')[0];
+  const _pad = n => String(n).padStart(2,'0');
+  const _now = new Date();
+  const today = `${_now.getFullYear()}-${_pad(_now.getMonth()+1)}-${_pad(_now.getDate())}`;
   const todayTemps = [];
   for(let i = 0; i < h.time.length; i++){
     if(h.time[i].startsWith(today)){
@@ -2479,9 +2481,17 @@ function buildHeroSummary(c, d, h, now){
     return 'cambiante';
   };
 
-  // find current hour index
-  const nowISO = now.toISOString().slice(0,13);
-  let idx = h.time.findIndex(t => t.slice(0,13) === nowISO);
+  // find current hour index. Open-Meteo times are LOCAL (timezone=auto),
+  // formatted "YYYY-MM-DDTHH:MM" with no timezone suffix. We must match
+  // against the user's LOCAL date+hour, not UTC (toISOString gives UTC).
+  const pad = n => String(n).padStart(2,'0');
+  const localKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}`;
+  const nowKey = localKey(now);
+  let idx = h.time.findIndex(t => t.slice(0,13) === nowKey);
+  // fallback: match by nearest hour if exact slot not found
+  if(idx < 0){
+    idx = h.time.findIndex(t => new Date(t).getTime() >= now.getTime());
+  }
   if(idx < 0) idx = 0;
 
   const horizon = Math.min(idx + 12, h.time.length - 1);
