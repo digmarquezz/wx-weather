@@ -376,6 +376,89 @@
     }
     .card-label::after{content:'';flex:1;height:1px;background:var(--line);}
 
+    /* ── EXPANDABLE CARD MARKER ──────────────────── */
+    .card.expandable{cursor:pointer;transition:transform 0.15s, box-shadow 0.2s;}
+    .card.expandable:active{transform:scale(0.985);}
+    .expand-badge{
+      position:absolute;top:14px;right:14px;z-index:2;
+      width:22px;height:22px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.18);
+      color:#fff;font-size:12px;line-height:1;
+      transition:background 0.2s, transform 0.2s;
+    }
+    .card.expandable:active .expand-badge{transform:scale(0.9);background:rgba(255,255,255,0.25);}
+    .expand-badge svg{width:12px;height:12px;}
+
+    /* ── DETAIL MODAL ────────────────────────────── */
+    .detail-modal{
+      position:fixed;inset:0;z-index:300;display:none;
+      align-items:flex-end;justify-content:center;
+      background:rgba(4,8,16,0.55);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    }
+    .detail-modal.open{display:flex;animation:dmFade 0.3s ease;}
+    @keyframes dmFade{from{opacity:0;}to{opacity:1;}}
+    .detail-sheet{
+      width:100%;max-width:480px;
+      max-height:88vh;overflow-y:auto;
+      background:rgba(30,40,60,0.85);
+      backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+      border:1px solid rgba(255,255,255,0.15);
+      border-bottom:none;
+      border-radius:28px 28px 0 0;
+      padding:10px 20px calc(var(--safe-bottom) + 28px);
+      box-shadow:0 -10px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+      transform:translateY(100%);
+      transition:transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
+    .detail-modal.open .detail-sheet{transform:translateY(0);}
+    .sheet-handle{
+      width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,0.25);
+      margin:8px auto 16px;
+    }
+    .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+    .sheet-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:10px;}
+    .sheet-title .em{font-size:24px;}
+    .sheet-close{
+      width:34px;height:34px;border-radius:50%;flex-shrink:0;
+      background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);
+      color:#fff;font-size:18px;line-height:1;cursor:pointer;
+    }
+    .sheet-close:active{transform:scale(0.92);}
+    .sheet-sub{font-size:9px;letter-spacing:0.16em;color:var(--text-dim);text-transform:uppercase;margin-bottom:18px;}
+    .sheet-body{font-size:13px;line-height:1.6;color:var(--text);}
+    .sheet-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+      padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .sheet-row:last-child{border-bottom:none;}
+    .sheet-row .k{color:var(--text-dim);font-size:11px;letter-spacing:0.04em;flex-shrink:0;}
+    .sheet-row .v{font-weight:700;text-align:right;font-size:13px;}
+    .sheet-note{
+      margin-top:14px;padding:14px;border-radius:14px;
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);
+      font-size:11.5px;line-height:1.6;color:var(--text-dim);letter-spacing:0.02em;
+    }
+    .sheet-note b{color:#fff;}
+    .sheet-scale{display:flex;gap:4px;margin:12px 0 2px;}
+    .scale-seg{flex:1;height:6px;border-radius:3px;opacity:0.3;transition:opacity 0.2s;}
+    .scale-seg.active{opacity:1;}
+    .scale-labels{display:flex;justify-content:space-between;font-size:8px;letter-spacing:0.08em;color:var(--text-dim);margin-top:5px;}
+
+    /* ── ROTATE LOCK ─────────────────────────────── */
+    #rotate-lock{
+      position:fixed;inset:0;z-index:9999;display:none;
+      flex-direction:column;align-items:center;justify-content:center;gap:18px;
+      background:#06070d;color:#fff;text-align:center;padding:30px;
+    }
+    #rotate-lock svg{color:#4d96ff;animation:rotateHint 2s ease-in-out infinite;}
+    @keyframes rotateHint{0%,100%{transform:rotate(0);}50%{transform:rotate(-20deg);}}
+    .rotate-txt{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.16em;line-height:2;}
+    .rotate-txt span{font-size:9px;font-weight:400;color:var(--text-dim,#888);letter-spacing:0.1em;}
+    @media (max-height:500px) and (orientation:landscape){
+      #rotate-lock{display:flex;}
+    }
+
     /* ── HERO ───────────────────────────────────── */
     .hero-top{
       display:flex;align-items:center;justify-content:space-between;
@@ -1524,6 +1607,28 @@
   </div>
 </div>
 
+<!-- DETAIL MODAL (expandable cards) -->
+<div class="detail-modal" id="detail-modal">
+  <div class="detail-sheet" id="detail-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="sheet-title">—</div>
+      <button class="sheet-close" id="sheet-close">×</button>
+    </div>
+    <div class="sheet-sub" id="sheet-sub"></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<!-- LANDSCAPE LOCK -->
+<div id="rotate-lock">
+  <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="2" width="14" height="20" rx="2"/>
+    <line x1="12" y1="18" x2="12" y2="18"/>
+  </svg>
+  <div class="rotate-txt">GIRA EL DISPOSITIVO<br/><span>WX funciona en vertical</span></div>
+</div>
+
 <script>
 // Prevent pinch-zoom
 document.addEventListener('gesturestart', e => e.preventDefault());
@@ -1902,6 +2007,8 @@ function hideLoader(){
     el.classList.remove('skeleton', 'skeleton-block', 'skeleton-temp');
   });
   animateCards();
+  // make rich cards expandable (independent of data fetch completing)
+  if(typeof setupExpandableCards==='function') setupExpandableCards();
 }
 function swTab(t){$('ph').style.display=t==='h'?'block':'none';$('pw').style.display=t==='w'?'block':'none';$('tab-h').className='tab'+(t==='h'?' on':'');$('tab-w').className='tab'+(t==='w'?' on':'');}
 
@@ -2572,6 +2679,161 @@ function buildHeroSummary(c, d, h, now){
   return txt.trim();
 }
 
+// ─── EXPANDABLE CARDS / DETAIL MODAL ──────────────────
+// Cards that have richer info worth expanding, matched by their label text.
+const EXPANDABLE = {
+  'CONDICIONES': buildConditionsDetail,
+  'POLEN': buildPollenDetail,
+  'CALIDAD DEL AIRE': buildAirDetail,
+  'PRÓXIMA LLUVIA': buildRainDetail,
+  'IMPACTO CLIMÁTICO': buildClimateDetail,
+  'ASTRO SOLAR': buildSunMoonDetail,
+  'HORA DORADA': buildSunMoonDetail,
+  'FASE LUNAR': buildSunMoonDetail,
+};
+
+function setupExpandableCards(){
+  document.querySelectorAll('.card').forEach(card=>{
+    if(card.dataset.expBound) return;
+    const labelEl = card.querySelector('.card-label');
+    if(!labelEl) return;
+    const label = labelEl.textContent.trim().toUpperCase();
+    // find a matching key (label may contain extra text)
+    const key = Object.keys(EXPANDABLE).find(k => label.startsWith(k) || label.includes(k));
+    if(!key) return;
+    card.classList.add('expandable');
+    card.dataset.expBound = '1';
+    // add badge
+    const badge = document.createElement('div');
+    badge.className = 'expand-badge';
+    badge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+    card.appendChild(badge);
+    card.addEventListener('click', ()=> openDetail(key));
+  });
+}
+
+function openDetail(key){
+  const builder = EXPANDABLE[key];
+  if(!builder || !window.__wx) return;
+  const data = builder(window.__wx);
+  if(!data) return;
+  $('sheet-title').innerHTML = (data.emoji?`<span class="em">${data.emoji}</span>`:'') + data.title;
+  $('sheet-sub').textContent = data.sub || '';
+  $('sheet-body').innerHTML = data.html;
+  $('detail-modal').classList.add('open');
+}
+function closeDetail(){ $('detail-modal').classList.remove('open'); }
+
+function row(k,v){ return `<div class="sheet-row"><span class="k">${k}</span><span class="v">${v}</span></div>`; }
+function note(html){ return `<div class="sheet-note">${html}</div>`; }
+function scaleBar(segments, activeIdx, labels){
+  let s = '<div class="sheet-scale">';
+  segments.forEach((col,i)=>{ s += `<div class="scale-seg${i===activeIdx?' active':''}" style="background:${col}"></div>`; });
+  s += '</div>';
+  if(labels) s += `<div class="scale-labels">${labels.map(l=>`<span>${l}</span>`).join('')}</div>`;
+  return s;
+}
+
+// ── CONDITIONS ──
+function buildConditionsDetail({c}){
+  const uv = c.uv_index ?? 0;
+  const uvLevel = uv<3?0:uv<6?1:uv<8?2:uv<11?3:4;
+  const uvNames = ['Bajo','Moderado','Alto','Muy alto','Extremo'];
+  let html = '';
+  html += row('Índice UV', `${uv.toFixed(1)} · ${uvNames[uvLevel]}`);
+  html += scaleBar(['#6bcb77','#ffd93d','#ff9f43','#ff5e6c','#c86bff'], uvLevel, ['0','3','6','8','11+']);
+  html += row('Presión', `${Math.round(c.surface_pressure ?? c.pressure_msl ?? 0)} hPa`);
+  html += row('Visibilidad', `${((c.visibility??0)/1000).toFixed(1)} km`);
+  html += row('Punto de rocío', `${Math.round(c.dew_point_2m ?? 0)}°`);
+  html += row('Nubosidad', `${Math.round(c.cloud_cover ?? 0)}%`);
+  html += row('Ráfagas máx.', `${Math.round(c.wind_gusts_10m ?? 0)} km/h`);
+  html += note(uvLevel>=3
+    ? '<b>UV alto:</b> usa protección solar, gafas y evita el sol del mediodía.'
+    : 'El punto de rocío indica la sensación de bochorno: por encima de 20° el aire se nota húmedo y pesado.');
+  return {title:'CONDICIONES', emoji:'🌡️', sub:'Detalle de las condiciones actuales', html};
+}
+
+// ── POLLEN ──
+function buildPollenDetail({aq}){
+  const cur = aq && aq.current ? aq.current : {};
+  const types = [
+    ['Gramíneas', cur.grass_pollen],
+    ['Olivo', cur.olive_pollen],
+    ['Abedul', cur.birch_pollen],
+  ];
+  const lvl = v => v==null?'sin datos':v<1?'Nulo':v<20?'Bajo':v<50?'Moderado':v<200?'Alto':'Muy alto';
+  let html='';
+  types.forEach(([n,v])=>{ html += row(n, `${v!=null?Math.round(v):'—'} · ${lvl(v)}`); });
+  html += note('El polen se mide en granos por m³. En primavera, las <b>gramíneas</b> y el <b>olivo</b> son los más alérgenos en España. Si eres sensible, ventila a primera hora y evita el ejercicio al aire libre con niveles altos.');
+  return {title:'POLEN', emoji:'🌾', sub:'Niveles de polen en el aire', html};
+}
+
+// ── AIR QUALITY ──
+function buildAirDetail({aq}){
+  const cur = aq && aq.current ? aq.current : {};
+  const aqi = cur.european_aqi;
+  const lvl = aqi==null?0:aqi<=20?0:aqi<=40?1:aqi<=60?2:aqi<=80?3:4;
+  const names=['Buena','Aceptable','Moderada','Mala','Muy mala'];
+  let html='';
+  html += row('Índice europeo (AQI)', aqi!=null?`${Math.round(aqi)} · ${names[lvl]}`:'sin datos');
+  html += scaleBar(['#6bcb77','#a0e548','#ffd93d','#ff9f43','#ff5e6c'], lvl, ['0','20','40','60','80+']);
+  html += row('PM2.5', cur.pm2_5!=null?`${cur.pm2_5.toFixed(1)} µg/m³`:'—');
+  html += row('PM10', cur.pm10!=null?`${cur.pm10.toFixed(1)} µg/m³`:'—');
+  html += note(lvl>=3
+    ? '<b>Calidad del aire mala:</b> personas sensibles deberían limitar el ejercicio intenso al aire libre.'
+    : 'Las partículas <b>PM2.5</b> son las más finas y peligrosas: penetran hasta los pulmones. Por debajo de 25 µg/m³ se consideran aceptables.');
+  return {title:'CALIDAD DEL AIRE', emoji:'💨', sub:'Contaminación atmosférica', html};
+}
+
+// ── NEXT RAIN ──
+function buildRainDetail({h, placeNow}){
+  if(!h || !h.time) return null;
+  const pad = n=>String(n).padStart(2,'0');
+  const nowKey = placeNow ? `${placeNow.getFullYear()}-${pad(placeNow.getMonth()+1)}-${pad(placeNow.getDate())}T${pad(placeNow.getHours())}` : null;
+  let idx = nowKey ? h.time.findIndex(t=>t.slice(0,13)===nowKey) : 0;
+  if(idx<0) idx=0;
+  let html='';
+  let found=false;
+  for(let i=idx;i<Math.min(idx+18,h.time.length);i++){
+    const prob = h.precipitation_probability?h.precipitation_probability[i]:0;
+    const mm = h.precipitation?h.precipitation[i]:0;
+    if(prob>=20 || mm>0){
+      const hr=new Date(h.time[i]).getHours();
+      html += row(`${pad(hr)}:00`, `${prob}% · ${mm.toFixed(1)} mm`);
+      found=true;
+    }
+  }
+  if(!found) html = note('No se espera lluvia significativa en las próximas 18 horas. ☀️');
+  else html += note('Probabilidad de precipitación y cantidad estimada hora a hora. Una probabilidad alta con pocos mm suele ser lluvia ligera o intermitente.');
+  return {title:'PRÓXIMA LLUVIA', emoji:'🌧️', sub:'Previsión hora a hora', html};
+}
+
+// ── CLIMATE IMPACT ──
+function buildClimateDetail({d}){
+  let html = '';
+  const todayMax = d.temperature_2m_max?d.temperature_2m_max[0]:null;
+  html += row('Máxima de hoy', todayMax!=null?`${Math.round(todayMax)}°`:'—');
+  const el = document.getElementById('climate-diff');
+  if(el) html += row('vs. media histórica', el.textContent);
+  html += note('Comparamos la temperatura de hoy con la media de las últimas dos décadas para esta misma fecha y lugar (datos de Open-Meteo Archive). Una diferencia grande y sostenida es una de las señales visibles del cambio climático.');
+  return {title:'IMPACTO CLIMÁTICO', emoji:'🌍', sub:'Hoy frente a la historia', html};
+}
+
+// ── SUN & MOON ──
+function buildSunMoonDetail({d, placeNow}){
+  let html='';
+  const sr = d.sunrise?d.sunrise[0].slice(11,16):'—';
+  const ss = d.sunset?d.sunset[0].slice(11,16):'—';
+  html += row('Amanecer', sr);
+  html += row('Atardecer', ss);
+  if(d.daylight_duration){
+    const s=d.daylight_duration[0]; const hh=Math.floor(s/3600), mm=Math.floor((s%3600)/60);
+    html += row('Horas de luz', `${hh}h ${mm}min`);
+  }
+  html += note('La <b>hora dorada</b> (justo tras el amanecer y antes del atardecer) ofrece la mejor luz para fotografía: cálida y suave. La <b>hora azul</b>, un poco antes/después, da tonos fríos ideales para paisajes urbanos.');
+  return {title:'SOL Y LUNA', emoji:'🌅', sub:'Luz del día y fotografía', html};
+}
+
 async function run(){
   setLoad('OBTENIENDO UBICACIÓN...', 8);
   let lat, lon, customMode = false, customName = '', customCC = '';
@@ -2641,6 +2903,8 @@ async function run(){
 
   setLoad('PROCESANDO...', 72);
   const c = wx.current, d = wx.daily, h = wx.hourly, now = new Date();
+  // expose for the detail modal
+  window.__wx = { c, d, h, aq, placeNow: null };
 
   // Local hour AT THE SEARCHED LOCATION (not the device). Open-Meteo with
   // timezone=auto returns utc_offset_seconds for the queried place. The real
@@ -2656,9 +2920,14 @@ async function run(){
   );
 
   const isNight = placeHour < 6 || placeHour >= 21;
+  window.__wx.placeNow = placeNow;
+  window.__wx.placeHour = placeHour;
 
   // ── DYNAMIC BACKGROUND (Liquid Glass) — uses the PLACE's local hour ──
   updateBackground(c.weather_code, placeHour);
+
+  // ── mark expandable cards once data is ready ──
+  setupExpandableCards();
 
   // ── ALERT (SEMÁFORO) ──
   const alert = buildAlert(c, d, h);
@@ -3026,7 +3295,16 @@ updateBackground(0, new Date().getHours());
   setTimeout(onScroll, 300);
 })();
 
+// detail modal close handlers
+$('sheet-close').addEventListener('click', closeDetail);
+$('detail-modal').addEventListener('click', e=>{ if(e.target===$('detail-modal')) closeDetail(); });
+
+// safety net: ensure rich cards become expandable even if the data flow
+// takes an unusual path (cards exist in the DOM from the start)
+setTimeout(()=>{ if(typeof setupExpandableCards==='function') setupExpandableCards(); }, 1500);
+
 run();
 </script>
+
 </body>
 </html>
