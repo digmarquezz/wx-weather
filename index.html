@@ -187,9 +187,16 @@
 
     /* ─── DYNAMIC BACKGROUND ─────────────────────────── */
     #bg-layer{
-      position:fixed;inset:0;z-index:-3;
+      position:fixed;inset:0;z-index:-4;
       transition:background 2s ease;
       background:linear-gradient(170deg,#7fb0d8 0%,#a8c8e0 45%,#cdd9c8 100%);
+    }
+    /* dark veil so white text always contrasts over light daytime skies,
+       while the coloured gradient still shows through (tuned per time of day) */
+    #bg-veil{
+      position:fixed;inset:0;z-index:-3;pointer-events:none;
+      transition:background 2s ease;
+      background:linear-gradient(180deg, rgba(8,12,20,0.30) 0%, rgba(8,12,20,0.42) 100%);
     }
     /* soft floating orbs for depth/refraction interest */
     #bg-orbs{
@@ -1164,6 +1171,7 @@
 
 <!-- DYNAMIC BACKGROUND (Liquid Glass needs something behind to refract) -->
 <div id="bg-layer"></div>
+<div id="bg-veil"></div>
 <div id="bg-orbs">
   <div class="orb o1"></div>
   <div class="orb o2"></div>
@@ -2319,6 +2327,20 @@ function updateBackground(weatherCode, hour){
   const key = rainy ? 'rainy' : snowy ? 'snowy' : cloudy ? 'cloudy' : 'clear';
   const pal = palettes[tod][key];
   bg.style.background = `linear-gradient(170deg, ${pal[0]} 0%, ${pal[1]} 48%, ${pal[2]} 100%)`;
+
+  // adjust the dark veil so white text always contrasts:
+  // strong veil over bright daytime/dawn skies, light veil at night (already dark)
+  const veil = document.getElementById('bg-veil');
+  if(veil){
+    let top, bot;
+    if(tod === 'day'){        top = 0.34; bot = 0.46; }
+    else if(tod === 'dawn'){  top = 0.30; bot = 0.44; }
+    else if(tod === 'dusk'){  top = 0.24; bot = 0.40; }
+    else {                    top = 0.10; bot = 0.22; } // night: barely any
+    // cloudy/snowy skies are paler, need a touch more
+    if((cloudy || snowy) && tod !== 'night'){ top += 0.04; bot += 0.04; }
+    veil.style.background = `linear-gradient(180deg, rgba(8,12,20,${top}) 0%, rgba(8,12,20,${bot}) 100%)`;
+  }
 
   // tune orbs: warmer/brighter by day, dimmer at night, bluish when rainy
   const orbs = document.querySelectorAll('.orb');
