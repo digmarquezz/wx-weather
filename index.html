@@ -2641,10 +2641,24 @@ async function run(){
 
   setLoad('PROCESANDO...', 72);
   const c = wx.current, d = wx.daily, h = wx.hourly, now = new Date();
-  const isNight = now.getHours() < 6 || now.getHours() >= 21;
 
-  // ── DYNAMIC BACKGROUND (Liquid Glass) ──
-  updateBackground(c.weather_code, now.getHours());
+  // Local hour AT THE SEARCHED LOCATION (not the device). Open-Meteo with
+  // timezone=auto returns utc_offset_seconds for the queried place. The real
+  // local time there = current UTC time + that offset.
+  const offsetSec = (typeof wx.utc_offset_seconds === 'number') ? wx.utc_offset_seconds : (-now.getTimezoneOffset()*60);
+  const shifted = new Date(now.getTime() + offsetSec*1000); // wall-clock-of-place stored in UTC fields
+  const placeHour = shifted.getUTCHours();
+  // Build a Date whose LOCAL getters (getHours/getDate...) return the place's
+  // wall clock, so helpers like buildHeroSummary work transparently.
+  const placeNow = new Date(
+    shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate(),
+    shifted.getUTCHours(), shifted.getUTCMinutes(), shifted.getUTCSeconds()
+  );
+
+  const isNight = placeHour < 6 || placeHour >= 21;
+
+  // ── DYNAMIC BACKGROUND (Liquid Glass) — uses the PLACE's local hour ──
+  updateBackground(c.weather_code, placeHour);
 
   // ── ALERT (SEMÁFORO) ──
   const alert = buildAlert(c, d, h);
@@ -2665,7 +2679,7 @@ async function run(){
   $('hero-icon').innerHTML = `<use href="#${wmoIcon(c.weather_code, isNight)}"/>`;
 
   // ── NATURAL-LANGUAGE SUMMARY ──
-  $('hero-summary').innerHTML = buildHeroSummary(c, d, h, now);
+  $('hero-summary').innerHTML = buildHeroSummary(c, d, h, placeNow);
 
   // FEELS WARNING
   const feelsDiff = Math.abs(c.apparent_temperature - c.temperature_2m);
